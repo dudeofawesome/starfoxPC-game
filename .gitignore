@@ -1,3 +1,8 @@
+# custom ignored files
+*.back*
+SoL/
+*.nosync*
+
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
