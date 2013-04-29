@@ -1,6 +1,6 @@
 #pragma strict
 
-var arwing : ArwingPlayer = new ArwingPlayer(GameObject.Find("model"),GameObject.Find("Lighting/LightEngine"),GameObject.Find("Lighting/LightGunLeft"),GameObject.Find("Lighting/LightGunRight"),GameObject.Find("Cameras/CamThirdPerson"),GameObject.Find("Cameras/CamFirstPerson"),GameObject.Find("GUI/crosshair"));
+// var arwing : ArwingPlayer = new ArwingPlayer(GameObject.Find("model"),GameObject.Find("Lighting/LightEngine"),GameObject.Find("Lighting/LightGunLeft"),GameObject.Find("Lighting/LightGunRight"),GameObject.Find("Cameras/CamThirdPerson"),GameObject.Find("Cameras/CamFirstPerson"),GameObject.Find("GUI/crosshair"));
 public var forwardSpeed = 0.0;
 public var rollSpeed = 0.0;
 public var pitchSpeed = 0.0;

@@ -1,23 +1,25 @@
 #pragma strict
 
-public laser : GameObject;
-private argoProjectiles : GameObject[] = new GameObject[500];
-private iNext = 0;
-public fMag = 10000;
+public var laser : GameObject;
+private var argoProjectiles : Array = new Array(500);
+public var numOfBullets = 500;
+private var iNext = 0;
+public var fMag = 10000;
 
 function Start () {
-	for (int i = 0; i < argoProjectiles.Length; i++) {
-		argoProjectiles[i] = (GameObject)Instantiate (laser);
-		argoProjectiles[i].SetActive (false);
-		argoProjectiles[i].AddComponent<Rigidbody>();
+	// laser.AddComponent(Rigidbody);
+	for (var i = 0; i < numOfBullets; i++) {
+		argoProjectiles[i] = Instantiate (laser);
+		// argoProjectiles[i].SetActive (false);
+		// argoProjectiles[i].AddComponent(Rigidbody);
 	}
 }
 
 function Update () {
 	if (Input.GetMouseButtonDown(0)) {
 		// GameObject.Find("pLightRightBlaster").GetComponent(AudioSource).Play();
-		GameObject go = argoProjectiles[iNext++];
-		if (iNext >= argoProjectiles.Length) iNext = 0;
+		var go : GameObject = argoProjectiles[iNext++];
+		if (iNext >= argoProjectiles.length) iNext = 0;
 		go.SetActive (true);
 		// go.AddComponent<Rigidbody>();
 		go.rigidbody.velocity = Vector3.zero;
