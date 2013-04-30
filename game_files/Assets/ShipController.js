@@ -4,6 +4,7 @@
 public var forwardSpeed = 0.0;
 public var rollSpeed = 0.0;
 public var pitchSpeed = 0.0;
+public var health : int = 100;
 
 function Start () {
 
@@ -48,10 +49,10 @@ function FixedUpdate () {
 		GameObject.Find("Cameras/CamFirstPerson").camera.enabled = !GameObject.Find("Cameras/CamThirdPerson").camera.enabled;
 		GameObject.Find("Cameras/CamThirdPerson").GetComponent(AudioListener).enabled = GameObject.Find("Cameras/CamFirstPerson").GetComponent(AudioListener).enabled;
 		GameObject.Find("Cameras/CamFirstPerson").GetComponent(AudioListener).enabled = !GameObject.Find("Cameras/CamThirdPerson").GetComponent(AudioListener).enabled;
-		// if(GameObject.Find("GUI/crosshair").transform.localPosition.y == 7)
-		// 	GameObject.Find("GUI/crosshair").transform.localPosition = new Vector3(0f,5f,0f);
-		// else
-		// 	GameObject.Find("GUI/crosshair").transform.localPosition = new Vector3(0f,7f,0f);
+		if(GameObject.Find("GUI/crosshair").transform.localPosition.y == 2.3)
+			GameObject.Find("GUI/crosshair").transform.localPosition.y = 1.4;
+		else
+			GameObject.Find("GUI/crosshair").transform.localPosition.y = 2.3;
 	}
 
 	//key up
