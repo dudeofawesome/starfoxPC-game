@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class LaserShooterCS : MonoBehaviour {
 
@@ -7,6 +8,7 @@ public class LaserShooterCS : MonoBehaviour {
 	private GameObject[] argoProjectiles = new GameObject[500];
 	private int iNext = 0;
 	public float fMag = 1000000.0f;
+	private float chargeTime = 0.0f;
 
 	void Start () {
 		for (int i = 0; i < argoProjectiles.Length; i++) {
@@ -20,6 +22,10 @@ public class LaserShooterCS : MonoBehaviour {
 
 	void Update () {
 		if (Input.GetMouseButtonDown(0)) {
+			chargeTime = Time.time;
+		}
+		if (Input.GetMouseButtonUp(0)) {
+			chargeTime = Time.time - chargeTime;
 			GameObject.Find("WeapLaserLeft").GetComponent<AudioSource>().Play();
 			GameObject.Find("WeapLaserRight").GetComponent<AudioSource>().Play();
 			GameObject go = argoProjectiles[iNext++];
@@ -27,7 +33,9 @@ public class LaserShooterCS : MonoBehaviour {
 			go.SetActive (true);
 			// go.AddComponent<Rigidbody>();
 			go.rigidbody.velocity = Vector3.zero;
-			go.transform.position = transform.position + transform.forward;
+			float _scaleSize = 19f / (1f + Mathf.Pow(0.1f, chargeTime - 2f)) + 1f;
+			go.transform.position = transform.position + transform.forward * _scaleSize;
+			go.transform.localScale = new Vector3(_scaleSize,_scaleSize,_scaleSize);
 			go.transform.rotation = Quaternion.Euler(transform.rotation.x,transform.rotation.y - 90,transform.rotation.z);
 			go.rigidbody.AddForce (transform.forward * fMag);
 			//go.rigidbody.AddForce (transform.forward * fMag * GameObject.Find("arwing").GetComponent("ThirdPersonShipController").forwardSpeed);

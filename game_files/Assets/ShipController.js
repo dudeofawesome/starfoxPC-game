@@ -105,7 +105,7 @@ function FixedUpdate () {
 		// }
 	}
 
-	transform.position += (6 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward;
+	transform.position += (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward;
 	GameObject.Find("Lighting/LightEngine").light.intensity = forwardSpeed / 120 * 7.7 + 0.3;
 	// arwing.engineLight.light.intensity = forwardSpeed / 120 * 7.7 + 0.3;
 	// arwing.particlesEngine.particleSystem.emissionRate = forwardSpeed * 5;
