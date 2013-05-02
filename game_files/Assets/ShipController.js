@@ -1,6 +1,7 @@
 #pragma strict
 
 // var arwing : ArwingPlayer = new ArwingPlayer(GameObject.Find("model"),GameObject.Find("Lighting/LightEngine"),GameObject.Find("Lighting/LightGunLeft"),GameObject.Find("Lighting/LightGunRight"),GameObject.Find("Cameras/CamThirdPerson"),GameObject.Find("Cameras/CamFirstPerson"),GameObject.Find("GUI/crosshair"));
+public var controlMe : boolean = true;
 public var forwardSpeed = 0.0;
 public var rollSpeed = 0.0;
 public var pitchSpeed = 0.0;
@@ -44,7 +45,7 @@ function FixedUpdate () {
 	if(Input.GetKeyDown(KeyCode.S)){
 		// arwing.camThirdPerson.transform.Rotate(-3,0,0);
 	}
-	if(Input.GetKeyDown(KeyCode.F1)){
+	if(Input.GetKeyDown(KeyCode.F1) && controlMe){
 		GameObject.Find("Cameras/CamThirdPerson").camera.enabled = GameObject.Find("Cameras/CamFirstPerson").camera.enabled;
 		GameObject.Find("Cameras/CamFirstPerson").camera.enabled = !GameObject.Find("Cameras/CamThirdPerson").camera.enabled;
 		GameObject.Find("Cameras/CamThirdPerson").GetComponent(AudioListener).enabled = GameObject.Find("Cameras/CamFirstPerson").GetComponent(AudioListener).enabled;
@@ -74,19 +75,19 @@ function FixedUpdate () {
 	}
 
 	//key pressed
-	if(Input.GetKey(KeyCode.D)){
+	if(Input.GetKey(KeyCode.D) && controlMe){
 		rollSpeed += 1;
 		transform.Rotate(0,0,-2 * 1 / (1 + 5 * Mathf.Pow(0.82,rollSpeed - 6)) - 0.1666);
 	}
-	if(Input.GetKey(KeyCode.A)){
+	if(Input.GetKey(KeyCode.A) && controlMe){
 		rollSpeed += 1;
 		transform.Rotate(0,0,2 * 1 / (1 + 5 * Mathf.Pow(0.82,rollSpeed - 6)) - 0.1666);
 	}
-	if(Input.GetKey(KeyCode.W)){
+	if(Input.GetKey(KeyCode.W) && controlMe){
 		pitchSpeed += 1;
 		transform.Rotate(1 * 1 / (1 + 5 * Mathf.Pow(0.82,pitchSpeed - 6)) - 0.1666,0,0);
 	}
-	if(Input.GetKey(KeyCode.S)){
+	if(Input.GetKey(KeyCode.S) && controlMe){
 		pitchSpeed += 1;
 		transform.Rotate(-1 * 1 / (1 + 5 * Mathf.Pow(0.82,pitchSpeed - 6)) - 0.1666,0,0);
 	}
@@ -104,7 +105,6 @@ function FixedUpdate () {
 		// 	arwing.engineLight.GetComponent(TrailRenderer).enabled = false;
 		// }
 	}
-
 	transform.position += (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward;
 	GameObject.Find("Lighting/LightEngine").light.intensity = forwardSpeed / 120 * 7.7 + 0.3;
 	// arwing.engineLight.light.intensity = forwardSpeed / 120 * 7.7 + 0.3;
