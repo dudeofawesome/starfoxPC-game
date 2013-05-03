@@ -1,4 +1,5 @@
 #pragma strict
+import Holoville.HOTween;
 
 // var arwing : ArwingPlayer = new ArwingPlayer(GameObject.Find("model"),GameObject.Find("Lighting/LightEngine"),GameObject.Find("Lighting/LightGunLeft"),GameObject.Find("Lighting/LightGunRight"),GameObject.Find("Cameras/CamThirdPerson"),GameObject.Find("Cameras/CamFirstPerson"),GameObject.Find("GUI/crosshair"));
 public var controlMe : boolean = true;
@@ -22,6 +23,15 @@ function Update () {
 	if(Input.GetMouseButtonUp(0)){
 		GameObject.Find("Lighting/LightGunLeft").light.enabled = false;
 		GameObject.Find("Lighting/LightGunRight").light.enabled = false;
+	}
+
+	if(Input.GetMouseButtonDown(2)){
+		HOTween.To(GameObject.Find("Cameras/CamThirdPerson").camera, 0.3, "fieldOfView", 30);
+		HOTween.To(GameObject.Find("Cameras/CamFirstPerson").camera, 0.3, "fieldOfView", 30);
+	}
+	if(Input.GetMouseButtonUp(2)){
+		HOTween.To(GameObject.Find("Cameras/CamThirdPerson").camera, 0.3, "fieldOfView", 60);
+		HOTween.To(GameObject.Find("Cameras/CamFirstPerson").camera, 0.3, "fieldOfView", 60);
 	}
 }
 
