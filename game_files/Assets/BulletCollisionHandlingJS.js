@@ -39,8 +39,16 @@ function OnCollisionEnter (other : Collision)
 			_parts2.particleSystem.Play();
 			_parts3.particleSystem.Play();
 			Destroy(other.gameObject);
-			print("it was me");
 		}
+	}
+	else if (other.gameObject.name == "smart_bomb") {
+		_parts1.transform.position = other.gameObject.transform.position;
+		_parts2.transform.position = other.gameObject.transform.position;
+		_parts3.transform.position = other.gameObject.transform.position;
+		_parts1.particleSystem.Play();
+		_parts2.particleSystem.Play();
+		_parts3.particleSystem.Play();
+		Destroy(other.gameObject);
 	}
 	print(other.gameObject.GetComponent(ShipController).health);
 
