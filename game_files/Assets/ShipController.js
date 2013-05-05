@@ -117,6 +117,28 @@ function FixedUpdate () {
 	}
 	transform.position += (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward;
 	GameObject.Find("Lighting/LightEngine").light.intensity = forwardSpeed / 120 * 7.7 + 0.3;
-	// arwing.engineLight.light.intensity = forwardSpeed / 120 * 7.7 + 0.3;
-	// arwing.particlesEngine.particleSystem.emissionRate = forwardSpeed * 5;
+	GameObject.Find("Emitters/EmitPartEngine").particleSystem.emissionRate = forwardSpeed * 2;
+	// GameObject.Find("Emitters/EmitPartEngine").particleSystem.emissionRate = forwardSpeed * 2;
+
+	if(controlMe)
+		GameObject.Find("CamMiniMap").transform.position = new Vector3(transform.position.x,transform.position.y + 2500,transform.position.z);
+	// GameObject.Find("CamMiniMap").transform.rotation.y = transform.rotation.y;
+}
+
+function OnCollisionEnter (other : Collision) {
+	if(other.gameObject.tag == "immobile"){
+		HOTween.To(transform, 0.3, "position", new Vector3(transform.position.x - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.x * 40,transform.position.y - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.y * 40,transform.position.z - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.z * 40));
+		// transform.position -= (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward * 40;
+		health -= 5;
+	}
+	else if(other.gameObject.tag == "mobile"){
+		HOTween.To(transform, 0.3, "position", new Vector3(transform.position.x - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.x * 5,transform.position.y - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.y * 5,transform.position.z - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.z * 5));
+		// transform.position -= (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward * 40;
+		health -= 1;
+	}
+	else if(other.gameObject.tag == "mobile_push"){
+		// HOTween.To(transform, 0.3, "position", new Vector3(transform.position.x - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.x * 5,transform.position.y - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.y * 5,transform.position.z - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.z * 5));
+		// transform.position -= (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward * 40;
+		health -= 0.1;
+	}
 }

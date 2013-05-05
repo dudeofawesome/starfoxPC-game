@@ -31,13 +31,12 @@ public class LaserShooterCS : MonoBehaviour {
 			GameObject go = argoProjectiles[iNext++];
 			if (iNext >= argoProjectiles.Length) iNext = 0;
 			go.SetActive (true);
-			// go.AddComponent<Rigidbody>();
 			go.rigidbody.velocity = Vector3.zero;
 			float _scaleSize = 19f / (1f + Mathf.Pow(0.1f, chargeTime - 2f)) + 1f;
 			go.transform.position = transform.position + transform.forward * _scaleSize;
 			go.transform.localScale = new Vector3(_scaleSize,_scaleSize,_scaleSize);
 			go.transform.rotation = Quaternion.Euler(transform.rotation.x,transform.rotation.y - 90,transform.rotation.z);
-			go.rigidbody.AddForce (transform.forward * fMag);
+			go.rigidbody.AddForce (transform.forward * fMag + transform.forward);
 			//go.rigidbody.AddForce (transform.forward * fMag * GameObject.Find("arwing").GetComponent("ThirdPersonShipController").forwardSpeed);
 		}
 	}
