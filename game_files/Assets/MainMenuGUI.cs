@@ -47,9 +47,8 @@ public class MainMenuGUI : MonoBehaviour {
 			break;
 			case MenuPositionEnum.ACCOUNT :
 				GUI.Label (new Rect(Screen.width / 2 - 50, 70, 100, 30), "Account Options", titleLabelStyle);
-				if (GUI.Button (new Rect(Screen.width / 2 - 250, 250, 500, 50), "Ipsum", buttonStyle)) {
-
-				}
+				GUI.Label (new Rect(Screen.width / 2 - 250, 250, 500, 30), "Email", descLabelStyle);
+				PlayerPrefs.SetString("email",GUI.TextField (new Rect(Screen.width / 2 - 150, 250, 400, 20), PlayerPrefs.GetString("email")));
 				GUI.Label (new Rect(Screen.width / 2 - 250, 310, 500, 50), "Color", descLabelStyle);
 				PlayerPrefs.SetInt("color",(int) GUI.HorizontalSlider (new Rect(Screen.width / 2 - 150, 330, 400, 20), PlayerPrefs.GetInt("color"), 0.0f, 255.0f));
 				// PlayerPrefs.SetInt("color",(int) GUI.HorizontalSlider (new Rect(Screen.width / 2 - 310, 250, 500, 20), PlayerPrefs.GetInt("color"), 0.0f, 255.0f,sliderBackStyle,sliderThumbStyle));
