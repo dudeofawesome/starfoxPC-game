@@ -8,11 +8,18 @@ public var rollSpeed = 0.0;
 public var pitchSpeed = 0.0;
 public var health : int = 100;
 
+public var particleFlash : GameObject;
+public var particleFireball : GameObject;
+public var particleFireRing : GameObject;
+
 function Start () {
 
 }
 
 function Update () {
+	if(GameObject.Find("Cameras/CamDeath").camera.enabled == true)
+		controlMe = false;
+
 	//mouse down
 	if(Input.GetMouseButtonDown(0)){
 		GameObject.Find("Lighting/LightGunLeft").light.enabled = true;
@@ -120,8 +127,10 @@ function FixedUpdate () {
 	GameObject.Find("Emitters/EmitPartEngine").particleSystem.emissionRate = forwardSpeed * 2;
 	// GameObject.Find("Emitters/EmitPartEngine").particleSystem.emissionRate = forwardSpeed * 2;
 
-	if(controlMe)
+	if(controlMe){
 		GameObject.Find("CamMiniMap").transform.position = new Vector3(transform.position.x,transform.position.y + 2500,transform.position.z);
+		GameObject.Find("CamMiniMap").transform.rotation.eulerAngles.y = transform.rotation.eulerAngles.y;
+	}
 	// GameObject.Find("CamMiniMap").transform.rotation.y = transform.rotation.y;
 }
 
@@ -140,5 +149,29 @@ function OnCollisionEnter (other : Collision) {
 		// HOTween.To(transform, 0.3, "position", new Vector3(transform.position.x - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.x * 5,transform.position.y - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.y * 5,transform.position.z - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.z * 5));
 		// transform.position -= (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward * 40;
 		health -= 0.1;
+	}
+	if (gameObject.GetComponent(ShipController).health < 0) {
+		var _parts1 : GameObject = Instantiate(particleFlash);
+		var _parts2 : GameObject = Instantiate(particleFireball);
+		var _parts3 : GameObject = Instantiate(particleFireRing);
+
+		GameObject.Find("Cameras/CamThirdPerson").camera.enabled = false;
+		GameObject.Find("Cameras/CamFirstPerson").camera.enabled = false;
+		GameObject.Find("Cameras/CamThirdPerson").GetComponent(AudioListener).enabled =false;
+		GameObject.Find("Cameras/CamFirstPerson").GetComponent(AudioListener).enabled = false;
+		GameObject.Find("Cameras/CamDeath").camera.enabled = true;
+		GameObject.Find("Cameras/CamDeath").GetComponent(AudioListener).enabled = true;
+
+		_parts1.transform.position = other.gameObject.transform.position;
+		_parts2.transform.position = other.gameObject.transform.position;
+		_parts3.transform.position = other.gameObject.transform.position;
+		_parts1.particleSystem.Play();
+		_parts2.particleSystem.Play();
+		_parts3.particleSystem.Play();
+		other.gameObject.Find("ArwingMe/model").SetActive(false);
+		other.gameObject.Find("ArwingMe/Colliders").SetActive(false);
+		other.gameObject.Find("ArwingMe/GUI").SetActive(false);
+		other.gameObject.Find("ArwingMe/Lighting").SetActive(false);
+		other.gameObject.Find("ArwingMe/Emitters").SetActive(false);
 	}
 }

@@ -9,6 +9,7 @@ public class LaserShooterCS : MonoBehaviour {
 	private int iNext = 0;
 	public float fMag = 1000000.0f;
 	private float chargeTime = 0.0f;
+	public bool controlMe = true;
 
 	void Start () {
 		for (int i = 0; i < argoProjectiles.Length; i++) {
@@ -21,10 +22,12 @@ public class LaserShooterCS : MonoBehaviour {
 	}
 
 	void Update () {
+		if(GameObject.Find("Cameras/CamDeath").camera.enabled == true)
+			controlMe = false;
 		if (Input.GetMouseButtonDown(0)) {
 			chargeTime = Time.time;
 		}
-		if (Input.GetMouseButtonUp(0)) {
+		if (Input.GetMouseButtonUp(0) && controlMe) {
 			chargeTime = Time.time - chargeTime;
 			GameObject.Find("WeapLaserLeft").GetComponent<AudioSource>().Play();
 			GameObject.Find("WeapLaserRight").GetComponent<AudioSource>().Play();
