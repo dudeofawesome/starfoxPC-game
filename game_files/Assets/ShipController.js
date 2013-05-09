@@ -127,11 +127,17 @@ function FixedUpdate () {
 	GameObject.Find("Emitters/EmitPartEngine").particleSystem.emissionRate = forwardSpeed * 2;
 	// GameObject.Find("Emitters/EmitPartEngine").particleSystem.emissionRate = forwardSpeed * 2;
 
+	//minimap
 	if(controlMe){
 		GameObject.Find("CamMiniMap").transform.position = new Vector3(transform.position.x,transform.position.y + 2500,transform.position.z);
 		GameObject.Find("CamMiniMap").transform.rotation.eulerAngles.y = transform.rotation.eulerAngles.y;
 	}
-	// GameObject.Find("CamMiniMap").transform.rotation.y = transform.rotation.y;
+
+	//smoke when near death
+	if(this.health < 20)
+		GameObject.Find("Emitters/EmitPartSmoke").particleSystem.emissionRate = 10;
+	else if(this.health > 20)
+		GameObject.Find("Emitters/EmitPartSmoke").particleSystem.emissionRate = 0;
 }
 
 function OnCollisionEnter (other : Collision) {
@@ -150,7 +156,7 @@ function OnCollisionEnter (other : Collision) {
 		// transform.position -= (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward * 40;
 		health -= 0.1;
 	}
-	if (gameObject.GetComponent(ShipController).health < 0) {
+	if (controlMe && gameObject.GetComponent(ShipController).health < 0) {
 		var _parts1 : GameObject = Instantiate(particleFlash);
 		var _parts2 : GameObject = Instantiate(particleFireball);
 		var _parts3 : GameObject = Instantiate(particleFireRing);
