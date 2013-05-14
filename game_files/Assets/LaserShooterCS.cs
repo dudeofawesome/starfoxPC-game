@@ -27,7 +27,7 @@ public class LaserShooterCS : MonoBehaviour {
 		if (Input.GetMouseButtonDown(0)) {
 			chargeTime = Time.time;
 		}
-		if (Input.GetMouseButtonUp(0) && controlMe) {
+		if (controlMe && Input.GetMouseButtonUp(0)) {
 			chargeTime = Time.time - chargeTime;
 			GameObject.Find("WeapLaserLeft").GetComponent<AudioSource>().Play();
 			GameObject.Find("WeapLaserRight").GetComponent<AudioSource>().Play();
@@ -41,6 +41,9 @@ public class LaserShooterCS : MonoBehaviour {
 			go.transform.rotation = Quaternion.Euler(transform.rotation.x,transform.rotation.y - 90,transform.rotation.z);
 			go.rigidbody.AddForce (transform.forward * fMag + transform.forward);
 			//go.rigidbody.AddForce (transform.forward * fMag * GameObject.Find("arwing").GetComponent("ThirdPersonShipController").forwardSpeed);
+		}
+		if (controlMe && Input.GetMouseButtonDown(1)) {
+			
 		}
 	}
 }
