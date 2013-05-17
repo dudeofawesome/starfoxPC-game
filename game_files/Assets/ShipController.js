@@ -121,6 +121,7 @@ function FixedUpdate () {
 			// arwing.tailLights.GetComponent(MeshRenderer).enabled = false;
 		// 	arwing.engineLight.GetComponent(TrailRenderer).enabled = false;
 		// }
+		print("blarg");
 	}
 	transform.position += (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward;
 	GameObject.Find("Lighting/LightEngine").light.intensity = forwardSpeed / 120 * 7.7 + 0.3;
@@ -143,18 +144,15 @@ function FixedUpdate () {
 function OnCollisionEnter (other : Collision) {
 	if(other.gameObject.tag == "immobile"){
 		HOTween.To(transform, 0.3, "position", new Vector3(transform.position.x - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.x * 40,transform.position.y - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.y * 40,transform.position.z - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.z * 40));
-		// transform.position -= (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward * 40;
-		health -= 5;
+		health -= 15 * forwardSpeed / 120;
 	}
 	else if(other.gameObject.tag == "mobile"){
 		HOTween.To(transform, 0.3, "position", new Vector3(transform.position.x - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.x * 5,transform.position.y - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.y * 5,transform.position.z - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.z * 5));
-		// transform.position -= (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward * 40;
-		health -= 1;
+		// other.transform.AddForce(transform.forward);
+		health -= 5 * forwardSpeed / 120;
 	}
 	else if(other.gameObject.tag == "mobile_push"){
-		// HOTween.To(transform, 0.3, "position", new Vector3(transform.position.x - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.x * 5,transform.position.y - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.y * 5,transform.position.z - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.z * 5));
-		// transform.position -= (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward * 40;
-		health -= 0.1;
+		health -= 3 * forwardSpeed / 120;
 	}
 	if (controlMe && gameObject.GetComponent(ShipController).health < 0) {
 		var _parts1 : GameObject = Instantiate(particleFlash);
@@ -168,9 +166,9 @@ function OnCollisionEnter (other : Collision) {
 		GameObject.Find("Cameras/CamDeath").camera.enabled = true;
 		GameObject.Find("Cameras/CamDeath").GetComponent(AudioListener).enabled = true;
 
-		_parts1.transform.position = other.gameObject.transform.position;
-		_parts2.transform.position = other.gameObject.transform.position;
-		_parts3.transform.position = other.gameObject.transform.position;
+		_parts1.transform.position = gameObject.transform.position;
+		_parts2.transform.position = gameObject.transform.position;
+		_parts3.transform.position = gameObject.transform.position;
 		_parts1.particleSystem.Play();
 		_parts2.particleSystem.Play();
 		_parts3.particleSystem.Play();
@@ -179,5 +177,35 @@ function OnCollisionEnter (other : Collision) {
 		other.gameObject.Find("ArwingMe/GUI").SetActive(false);
 		other.gameObject.Find("ArwingMe/Lighting").SetActive(false);
 		other.gameObject.Find("ArwingMe/Emitters").SetActive(false);
+	}
+}
+
+function AddDamage (_damage : int) {
+	health -= _damage;
+	if (gameObject.GetComponent(ShipController).health < 0) {
+		var _parts1 : GameObject = Instantiate(particleFlash);
+		var _parts2 : GameObject = Instantiate(particleFireball);
+		var _parts3 : GameObject = Instantiate(particleFireRing);
+
+		GameObject.Find("Cameras/CamThirdPerson").camera.enabled = false;
+		GameObject.Find("Cameras/CamFirstPerson").camera.enabled = false;
+		GameObject.Find("Cameras/CamThirdPerson").GetComponent(AudioListener).enabled =false;
+		GameObject.Find("Cameras/CamFirstPerson").GetComponent(AudioListener).enabled = false;
+		GameObject.Find("Cameras/CamDeath").camera.enabled = true;
+		GameObject.Find("Cameras/CamDeath").GetComponent(AudioListener).enabled = true;
+
+		_parts1.transform.position = gameObject.transform.position;
+		_parts2.transform.position = gameObject.transform.position;
+		_parts3.transform.position = gameObject.transform.position;
+		_parts1.particleSystem.Play();
+		_parts2.particleSystem.Play();
+		_parts3.particleSystem.Play();
+		if (controlMe) {
+			GameObject.Find("ArwingMe/model").SetActive(false);
+			GameObject.Find("ArwingMe/Colliders").SetActive(false);
+			GameObject.Find("ArwingMe/GUI").SetActive(false);
+			GameObject.Find("ArwingMe/Lighting").SetActive(false);
+			GameObject.Find("ArwingMe/Emitters").SetActive(false);
+		}
 	}
 }

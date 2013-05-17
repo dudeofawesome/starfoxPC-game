@@ -1,8 +1,6 @@
 #pragma strict
 
-public var particleFlash : GameObject;
 public var particleFireball : GameObject;
-public var particleFireRing : GameObject;
 
 function Start () {
 
@@ -13,16 +11,10 @@ function Update () {
 }
 
 function OnCollisionEnter (other : Collision) {
-	var _parts1 : GameObject = Instantiate(particleFlash);
-	var _parts2 : GameObject = Instantiate(particleFireball);
-	var _parts3 : GameObject = Instantiate(particleFireRing);
+	var _parts : GameObject = Instantiate(particleFireball);
 
-	_parts1.transform.position = gameObject.transform.position;
-	_parts2.transform.position = gameObject.transform.position;
-	_parts3.transform.position = gameObject.transform.position;
-	_parts1.particleSystem.Play();
-	_parts2.particleSystem.Play();
-	_parts3.particleSystem.Play();
+	_parts.transform.position = gameObject.transform.position;
+	_parts.particleSystem.Play();
 
 	if (other.gameObject.name == "Arwing") {
 		other.gameObject.GetComponent(ShipController).health -= 50;
@@ -49,9 +41,10 @@ function OnCollisionEnter (other : Collision) {
 		}
 	}
 
-	var hitColliders = Physics.OverlapSphere(center, radius);
-	for (var i = 0; i < hitColliders.Length; i++) {
-		hitColliders[i].SendMessage("AddDamage");
+	for (var _player : Transform in GameObject.Find("Players").transform) {
+		print(_player.name);
+		if(Mathf.Pow(_player.transform.position.x - gameObject.transform.position.x, 2) + Mathf.Pow(_player.transform.position.y - gameObject.transform.position.y, 2) + Mathf.Pow(_player.transform.position.z - gameObject.transform.position.z, 2) > 36)
+			_player.SendMessage("AddDamage",25);
 	}
 
 	Destroy(gameObject);
