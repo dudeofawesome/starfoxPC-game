@@ -187,20 +187,21 @@ function AddDamage (_damage : int) {
 		var _parts2 : GameObject = Instantiate(particleFireball);
 		var _parts3 : GameObject = Instantiate(particleFireRing);
 
-		GameObject.Find("Cameras/CamThirdPerson").camera.enabled = false;
-		GameObject.Find("Cameras/CamFirstPerson").camera.enabled = false;
-		GameObject.Find("Cameras/CamThirdPerson").GetComponent(AudioListener).enabled =false;
-		GameObject.Find("Cameras/CamFirstPerson").GetComponent(AudioListener).enabled = false;
-		GameObject.Find("Cameras/CamDeath").camera.enabled = true;
-		GameObject.Find("Cameras/CamDeath").GetComponent(AudioListener).enabled = true;
-
 		_parts1.transform.position = gameObject.transform.position;
 		_parts2.transform.position = gameObject.transform.position;
 		_parts3.transform.position = gameObject.transform.position;
 		_parts1.particleSystem.Play();
 		_parts2.particleSystem.Play();
 		_parts3.particleSystem.Play();
+		
 		if (controlMe) {
+			GameObject.Find("Cameras/CamThirdPerson").camera.enabled = false;
+			GameObject.Find("Cameras/CamFirstPerson").camera.enabled = false;
+			GameObject.Find("Cameras/CamThirdPerson").GetComponent(AudioListener).enabled =false;
+			GameObject.Find("Cameras/CamFirstPerson").GetComponent(AudioListener).enabled = false;
+			GameObject.Find("Cameras/CamDeath").camera.enabled = true;
+			GameObject.Find("Cameras/CamDeath").GetComponent(AudioListener).enabled = true;
+
 			GameObject.Find("ArwingMe/model").SetActive(false);
 			GameObject.Find("ArwingMe/Colliders").SetActive(false);
 			GameObject.Find("ArwingMe/GUI").SetActive(false);

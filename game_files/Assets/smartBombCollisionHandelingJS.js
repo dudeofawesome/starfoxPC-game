@@ -43,7 +43,7 @@ function OnCollisionEnter (other : Collision) {
 
 	for (var _player : Transform in GameObject.Find("Players").transform) {
 		print(_player.name);
-		if(Mathf.Pow(_player.transform.position.x - gameObject.transform.position.x, 2) + Mathf.Pow(_player.transform.position.y - gameObject.transform.position.y, 2) + Mathf.Pow(_player.transform.position.z - gameObject.transform.position.z, 2) > 36)
+		if(Mathf.Pow(_player.transform.position.x - gameObject.transform.position.x, 2) + Mathf.Pow(_player.transform.position.y - gameObject.transform.position.y, 2) + Mathf.Pow(_player.transform.position.z - gameObject.transform.position.z, 2) < 64)
 			_player.SendMessage("AddDamage",25);
 	}
 
