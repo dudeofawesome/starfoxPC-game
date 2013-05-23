@@ -27,6 +27,8 @@ public class LaserShooterCS : MonoBehaviour {
 	void Update () {
 		if (GameObject.Find("Cameras/CamDeath").camera.enabled == true)
 			controlMe = false;
+		else
+			controlMe = true;
 		if (weaponType == WeaponType.LASER) {
 			if (Input.GetMouseButtonDown(0)) {
 				chargeTime = Time.time;

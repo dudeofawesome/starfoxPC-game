@@ -30,40 +30,42 @@ function OnCollisionEnter (other : Collision)
 		Destroy(other.gameObject);
 	}
 	else if (other.gameObject.name == "Arwing") {
-		other.gameObject.GetComponent(ShipController).health -= 10;
-		if (other.gameObject.GetComponent(ShipController).health < 0) {
-			_parts1.transform.position = other.gameObject.transform.position;
-			_parts2.transform.position = other.gameObject.transform.position;
-			_parts3.transform.position = other.gameObject.transform.position;
-			_parts1.particleSystem.Play();
-			_parts2.particleSystem.Play();
-			_parts3.particleSystem.Play();
-			Destroy(other.gameObject);
-		}
+		other.gameObject.SendMessage("AddDamage",10);
+		// other.gameObject.GetComponent(ShipController).health -= 10;
+		// if (other.gameObject.GetComponent(ShipController).health < 0) {
+		// 	_parts1.transform.position = other.gameObject.transform.position;
+		// 	_parts2.transform.position = other.gameObject.transform.position;
+		// 	_parts3.transform.position = other.gameObject.transform.position;
+		// 	_parts1.particleSystem.Play();
+		// 	_parts2.particleSystem.Play();
+		// 	_parts3.particleSystem.Play();
+		// 	Destroy(other.gameObject);
+		// }
 	}
 	else if (other.gameObject.name == "ArwingMe") {
-		other.gameObject.GetComponent(ShipController).health -= 10;
-		if (other.gameObject.GetComponent(ShipController).health < 0) {
-			GameObject.Find("Cameras/CamThirdPerson").camera.enabled = false;
-			GameObject.Find("Cameras/CamFirstPerson").camera.enabled = false;
-			GameObject.Find("Cameras/CamThirdPerson").GetComponent(AudioListener).enabled =false;
-			GameObject.Find("Cameras/CamFirstPerson").GetComponent(AudioListener).enabled = false;
-			GameObject.Find("Cameras/CamDeath").camera.enabled = true;
-			GameObject.Find("Cameras/CamDeath").GetComponent(AudioListener).enabled = true;
-			// gameObject.GetComponent("ShipController").active = false;
+		other.gameObject.SendMessage("AddDamage",10);
+		// other.gameObject.GetComponent(ShipController).health -= 10;
+		// if (other.gameObject.GetComponent(ShipController).health < 0) {
+		// 	GameObject.Find("Cameras/CamThirdPerson").camera.enabled = false;
+		// 	GameObject.Find("Cameras/CamFirstPerson").camera.enabled = false;
+		// 	GameObject.Find("Cameras/CamThirdPerson").GetComponent(AudioListener).enabled =false;
+		// 	GameObject.Find("Cameras/CamFirstPerson").GetComponent(AudioListener).enabled = false;
+		// 	GameObject.Find("Cameras/CamDeath").camera.enabled = true;
+		// 	GameObject.Find("Cameras/CamDeath").GetComponent(AudioListener).enabled = true;
+		// 	// gameObject.GetComponent("ShipController").active = false;
 
-			_parts1.transform.position = other.gameObject.transform.position;
-			_parts2.transform.position = other.gameObject.transform.position;
-			_parts3.transform.position = other.gameObject.transform.position;
-			_parts1.particleSystem.Play();
-			_parts2.particleSystem.Play();
-			_parts3.particleSystem.Play();
-			other.gameObject.Find("ArwingMe/model").SetActive(false);
-			other.gameObject.Find("ArwingMe/Colliders").SetActive(false);
-			other.gameObject.Find("ArwingMe/GUI").SetActive(false);
-			other.gameObject.Find("ArwingMe/Lighting").SetActive(false);
-			other.gameObject.Find("ArwingMe/Emitters").SetActive(false);
-		}
+		// 	_parts1.transform.position = other.gameObject.transform.position;
+		// 	_parts2.transform.position = other.gameObject.transform.position;
+		// 	_parts3.transform.position = other.gameObject.transform.position;
+		// 	_parts1.particleSystem.Play();
+		// 	_parts2.particleSystem.Play();
+		// 	_parts3.particleSystem.Play();
+		// 	other.gameObject.Find("ArwingMe/model").SetActive(false);
+		// 	other.gameObject.Find("ArwingMe/Colliders").SetActive(false);
+		// 	other.gameObject.Find("ArwingMe/GUI").SetActive(false);
+		// 	other.gameObject.Find("ArwingMe/Lighting").SetActive(false);
+		// 	other.gameObject.Find("ArwingMe/Emitters").SetActive(false);
+		// }
 	}
 	else if (other.gameObject.name == "smart_bomb") {
 		_parts1.transform.position = other.gameObject.transform.position;
