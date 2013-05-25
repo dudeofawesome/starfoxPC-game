@@ -48,9 +48,11 @@ function FixedUpdate () {
 	//key down
 	if(Input.GetKeyDown(KeyCode.E)){
 		//barrel roll right
+		HOTween.To(transform, 0.7, "rotation", new Vector3(transform.rotation.eulerAngles.x,transform.rotation.eulerAngles.y,transform.rotation.eulerAngles.z + 179));
 	}
 	if(Input.GetKeyDown(KeyCode.Q)){
 		//barrel roll right
+		HOTween.To(transform, 0.7, "rotation", new Vector3(transform.rotation.eulerAngles.x,transform.rotation.eulerAngles.y,transform.rotation.eulerAngles.z - 179));
 	}
 	if(Input.GetKeyDown(KeyCode.D)){
 		// arwing.camThirdPerson.transform.Rotate(0,0,-3);
@@ -69,10 +71,10 @@ function FixedUpdate () {
 		GameObject.Find("Cameras/CamFirstPerson").camera.enabled = !GameObject.Find("Cameras/CamThirdPerson").camera.enabled;
 		GameObject.Find("Cameras/CamThirdPerson").GetComponent(AudioListener).enabled = GameObject.Find("Cameras/CamFirstPerson").GetComponent(AudioListener).enabled;
 		GameObject.Find("Cameras/CamFirstPerson").GetComponent(AudioListener).enabled = !GameObject.Find("Cameras/CamThirdPerson").GetComponent(AudioListener).enabled;
-		if(GameObject.Find("GUI/crosshair").transform.localPosition.y == 2.3)
-			GameObject.Find("GUI/crosshair").transform.localPosition.y = 1.4;
+		if(GameObject.Find("3dGUI/crosshair").transform.localPosition.y == 2.3)
+			GameObject.Find("3dGUI/crosshair").transform.localPosition.y = 1.4;
 		else
-			GameObject.Find("GUI/crosshair").transform.localPosition.y = 2.3;
+			GameObject.Find("3dGUI/crosshair").transform.localPosition.y = 2.3;
 	}
 
 	//key up
@@ -206,16 +208,16 @@ function AddDamage (_damage : int) {
 		if (controlMe) {
 			GameObject.Find("GUI").SendMessage("ReceiveLives",this.lives);
 
-			GameObject.Find("Cameras/CamThirdPerson").camera.enabled = false;
-			GameObject.Find("Cameras/CamFirstPerson").camera.enabled = false;
-			GameObject.Find("Cameras/CamThirdPerson").GetComponent(AudioListener).enabled =false;
-			GameObject.Find("Cameras/CamFirstPerson").GetComponent(AudioListener).enabled = false;
 			GameObject.Find("Cameras/CamDeath").camera.enabled = true;
 			GameObject.Find("Cameras/CamDeath").GetComponent(AudioListener).enabled = true;
+			GameObject.Find("Cameras/CamThirdPerson").camera.enabled = false;
+			GameObject.Find("Cameras/CamFirstPerson").camera.enabled = false;
+			GameObject.Find("Cameras/CamThirdPerson").GetComponent(AudioListener).enabled = false;
+			GameObject.Find("Cameras/CamFirstPerson").GetComponent(AudioListener).enabled = false;
 
 			GameObject.Find("ArwingMe/model").SetActive(false);
 			GameObject.Find("ArwingMe/Colliders").SetActive(false);
-			GameObject.Find("ArwingMe/GUI").SetActive(false);
+			GameObject.Find("ArwingMe/3dGUI").SetActive(false);
 			GameObject.Find("ArwingMe/Lighting").SetActive(false);
 			GameObject.Find("ArwingMe/Emitters").SetActive(false);
 		}
@@ -232,7 +234,7 @@ function AddDamage (_damage : int) {
 			controlMe = true;
 
 			GameObject.Find("Cameras/CamThirdPerson").camera.enabled = true;
-			GameObject.Find("Cameras/CamThirdPerson").GetComponent(AudioListener).enabled =true;
+			GameObject.Find("Cameras/CamThirdPerson").GetComponent(AudioListener).enabled = true;
 			GameObject.Find("Cameras/CamDeath").camera.enabled = false;
 			GameObject.Find("Cameras/CamDeath").GetComponent(AudioListener).enabled = false;
 

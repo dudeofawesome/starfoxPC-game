@@ -7,6 +7,7 @@ public var bombCountStyle : GUIStyle;
 public var livesCountStyle : GUIStyle;
 public var healthBarBase : GUIStyle;
 public var healthBarHead : GUIStyle;
+public var statsTex : Texture;
 
 private var health = 100.0;
 private var lives = 3;
@@ -39,7 +40,11 @@ function OnGUI () {
 			if (GUI.Button (new Rect(Screen.width / 2 - 250, 250, 500, 50), "Settings", buttonStyle)) {
 				MenuPosition = MenuPositionEnumLive.SETTINGS;
 			}
-			if (GUI.Button (new Rect(Screen.width / 2 - 250, 310, 500, 50), "Quit", buttonStyle)) {
+			if (GUI.Button (new Rect(Screen.width / 2 - 250, 310, 245, 50), "Kill Me", buttonStyle)) {
+				MenuPosition = MenuPositionEnumLive.NONE;
+				GameObject.Find("ArwingMe").SendMessage("AddDamage",101);
+			}
+			if (GUI.Button (new Rect(Screen.width / 2, 310, 245, 50), "Quit", buttonStyle)) {
 				MenuPosition = MenuPositionEnumLive.LEVELQUITTER;
 				Application.LoadLevel(mainMenu);
 			}
@@ -67,14 +72,16 @@ function OnGUI () {
 		break;
 	}
 
+	GUI.DrawTexture(Rect(20, Screen.height - 220, 200, 200), statsTex);
+
 	//lives count
-	GUI.Label (new Rect(170,Screen.height - 76,20,20),"0" + lives,livesCountStyle);
+	GUI.Label (new Rect(146,Screen.height - 82,20,20),"0" + lives,livesCountStyle);
 
 	//bombs count
 	var matrixBackup : Matrix4x4 = GUI.matrix;
 	GUIUtility.RotateAroundPivot(-45, new Vector2(120,Screen.height - 180));
 	//GUI.DrawTexture(rect, texture);
-	GUI.Label (new Rect(113,Screen.height - 205,20,20),"0" + bombs,bombCountStyle);
+	GUI.Label (new Rect(96,Screen.height - 192,20,20),"0" + bombs,bombCountStyle);
 
 	var texture : Texture2D = new Texture2D(1, 1);
 	var color : Color = new Color(0,255,0);
@@ -84,15 +91,13 @@ function OnGUI () {
 	healthBarHead.normal.background = texture;
 
 	//health bar
-	if(275 * (health / 100.0) - 105 < 0 && health > 0){
-		GUI.Box (new Rect(-27,Screen.height - 146,275 * (health / 100.0),34),"",healthBarBase);
-		print(275 * (health / 100.0));
+	if(275 * (health / 100.0) - 80 < 0 && health > 0){
+		GUI.Box (new Rect(-18,Screen.height - 142,275 * (health / 100.0),25),"",healthBarBase);
 	}
 	else if (health > 0)
-		GUI.Box (new Rect(-27,Screen.height - 146,105,34),"",healthBarBase);
+		GUI.Box (new Rect(-18,Screen.height - 142,80,25),"",healthBarBase);
 	if(275 * (health / 100.0) - 105 >= 0){
-		GUI.Box (new Rect(70,Screen.height - 138,275 * (health / 100.0) - 105,25),"",healthBarHead);
-		print(275 * (health / 100.0) - 105);
+		GUI.Box (new Rect(62,Screen.height - 137,212 * (health / 100.0) - 80,20),"",healthBarHead);
 	}
 
 	GUI.matrix = matrixBackup;
