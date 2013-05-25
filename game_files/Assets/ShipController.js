@@ -1,6 +1,7 @@
 #pragma strict
 import Holoville.HOTween;
 
+public var playerIndex : String = "00";
 public var controlMe : boolean = true;
 public var forwardSpeed = 0.0;
 public var rollSpeed = 0.0;
@@ -19,26 +20,26 @@ function Start () {
 }
 
 function Update () {
-	if(GameObject.Find("Cameras/CamDeath").camera.enabled == true)
+	if(controlMe && GameObject.Find("Cameras/CamDeath").camera.enabled == true)
 		controlMe = false;
 
 	//mouse down
-	if(Input.GetMouseButtonDown(0)){
+	if(controlMe && Input.GetMouseButtonDown(0)){
 		GameObject.Find("Lighting/LightGunLeft").light.enabled = true;
 		GameObject.Find("Lighting/LightGunRight").light.enabled = true;
 	}
 
 	//mouse down
-	if(Input.GetMouseButtonUp(0)){
+	if(controlMe && Input.GetMouseButtonUp(0)){
 		GameObject.Find("Lighting/LightGunLeft").light.enabled = false;
 		GameObject.Find("Lighting/LightGunRight").light.enabled = false;
 	}
 
-	if(Input.GetMouseButtonDown(2)){
+	if(controlMe && Input.GetMouseButtonDown(2)){
 		HOTween.To(GameObject.Find("Cameras/CamThirdPerson").camera, 0.3, "fieldOfView", 30);
 		HOTween.To(GameObject.Find("Cameras/CamFirstPerson").camera, 0.3, "fieldOfView", 30);
 	}
-	if(Input.GetMouseButtonUp(2)){
+	if(controlMe && Input.GetMouseButtonUp(2)){
 		HOTween.To(GameObject.Find("Cameras/CamThirdPerson").camera, 0.3, "fieldOfView", 60);
 		HOTween.To(GameObject.Find("Cameras/CamFirstPerson").camera, 0.3, "fieldOfView", 60);
 	}
@@ -46,27 +47,27 @@ function Update () {
 
 function FixedUpdate () {
 	//key down
-	if(Input.GetKeyDown(KeyCode.E)){
+	if(controlMe && Input.GetKeyDown(KeyCode.E)){
 		//barrel roll right
 		HOTween.To(transform, 0.7, "rotation", new Vector3(transform.rotation.eulerAngles.x,transform.rotation.eulerAngles.y,transform.rotation.eulerAngles.z + 179));
 	}
-	if(Input.GetKeyDown(KeyCode.Q)){
+	if(controlMe && Input.GetKeyDown(KeyCode.Q)){
 		//barrel roll right
 		HOTween.To(transform, 0.7, "rotation", new Vector3(transform.rotation.eulerAngles.x,transform.rotation.eulerAngles.y,transform.rotation.eulerAngles.z - 179));
 	}
-	if(Input.GetKeyDown(KeyCode.D)){
+	if(controlMe && Input.GetKeyDown(KeyCode.D)){
 		// arwing.camThirdPerson.transform.Rotate(0,0,-3);
 	}
-	if(Input.GetKeyDown(KeyCode.A)){
+	if(controlMe && Input.GetKeyDown(KeyCode.A)){
 		// arwing.camThirdPerson.transform.Rotate(0,0,3);
 	}
-	if(Input.GetKeyDown(KeyCode.W)){
+	if(controlMe && Input.GetKeyDown(KeyCode.W)){
 		// arwing.camThirdPerson.transform.Rotate(3,0,0);
 	}
-	if(Input.GetKeyDown(KeyCode.S)){
+	if(controlMe && Input.GetKeyDown(KeyCode.S)){
 		// arwing.camThirdPerson.transform.Rotate(-3,0,0);
 	}
-	if(Input.GetKeyDown(KeyCode.F1) && controlMe){
+	if(controlMe && Input.GetKeyDown(KeyCode.F1) && controlMe){
 		GameObject.Find("Cameras/CamThirdPerson").camera.enabled = GameObject.Find("Cameras/CamFirstPerson").camera.enabled;
 		GameObject.Find("Cameras/CamFirstPerson").camera.enabled = !GameObject.Find("Cameras/CamThirdPerson").camera.enabled;
 		GameObject.Find("Cameras/CamThirdPerson").GetComponent(AudioListener).enabled = GameObject.Find("Cameras/CamFirstPerson").GetComponent(AudioListener).enabled;
@@ -78,48 +79,48 @@ function FixedUpdate () {
 	}
 
 	//key up
-	if(Input.GetKeyUp(KeyCode.D)){
+	if(controlMe && Input.GetKeyUp(KeyCode.D)){
 		// arwing.camThirdPerson.transform.Rotate(0,0,3);
 		rollSpeed = 0;
 	}
-	if(Input.GetKeyUp(KeyCode.A)){
+	if(controlMe && Input.GetKeyUp(KeyCode.A)){
 		// arwing.camThirdPerson.transform.Rotate(0,0,-3);
 		rollSpeed = 0;
 	}
-	if(Input.GetKeyUp(KeyCode.W)){
+	if(controlMe && Input.GetKeyUp(KeyCode.W)){
 		// arwing.camThirdPerson.transform.Rotate(-3,0,0);
 		pitchSpeed = 0;
 	}
-	if(Input.GetKeyUp(KeyCode.S)){
+	if(controlMe && Input.GetKeyUp(KeyCode.S)){
 		// arwing.camThirdPerson.transform.Rotate(3,0,0);
 		pitchSpeed = 0;
 	}
 
 	//key pressed
-	if(Input.GetKey(KeyCode.D) && controlMe){
+	if(controlMe && Input.GetKey(KeyCode.D)){
 		rollSpeed += 1;
 		transform.Rotate(0,0,-2 * 1 / (1 + 5 * Mathf.Pow(0.82,rollSpeed - 6)) - 0.1666);
 	}
-	if(Input.GetKey(KeyCode.A) && controlMe){
+	if(controlMe && Input.GetKey(KeyCode.A)){
 		rollSpeed += 1;
 		transform.Rotate(0,0,2 * 1 / (1 + 5 * Mathf.Pow(0.82,rollSpeed - 6)) - 0.1666);
 	}
-	if(Input.GetKey(KeyCode.W) && controlMe){
+	if(controlMe && Input.GetKey(KeyCode.W)){
 		pitchSpeed += 1;
 		transform.Rotate(1 * 1 / (1 + 5 * Mathf.Pow(0.82,pitchSpeed - 6)) - 0.1666,0,0);
 	}
-	if(Input.GetKey(KeyCode.S) && controlMe){
+	if(controlMe && Input.GetKey(KeyCode.S)){
 		pitchSpeed += 1;
 		transform.Rotate(-1 * 1 / (1 + 5 * Mathf.Pow(0.82,pitchSpeed - 6)) - 0.1666,0,0);
 	}
-	if(Input.GetKey(KeyCode.Space) && forwardSpeed < 120){
+	if(controlMe && Input.GetKey(KeyCode.Space) && forwardSpeed < 120){
 		forwardSpeed += .3;
 		// if(forwardSpeed > 0){
 			// arwing.tailLights.GetComponent(MeshRenderer).enabled = true;
 		// 	arwing.engineLight.GetComponent(TrailRenderer).enabled = true;
 		// }
 	}
-	if(Input.GetKey(KeyCode.LeftShift) && forwardSpeed > 0){
+	if(controlMe && Input.GetKey(KeyCode.LeftShift) && forwardSpeed > 0){
 		forwardSpeed -= .45;
 		// if(forwardSpeed < 0){
 			// arwing.tailLights.GetComponent(MeshRenderer).enabled = false;
@@ -127,8 +128,8 @@ function FixedUpdate () {
 		// }
 	}
 	transform.position += (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward;
-	GameObject.Find("Lighting/LightEngine").light.intensity = forwardSpeed / 120 * 7.7 + 0.3;
-	GameObject.Find("Emitters/EmitPartEngine").particleSystem.emissionRate = forwardSpeed * 2;
+	GameObject.Find("Arwing" + playerIndex + "/Lighting/LightEngine").light.intensity = forwardSpeed / 120 * 7.7 + 0.3;
+	GameObject.Find("Arwing" + playerIndex + "/Emitters/EmitPartEngine").particleSystem.emissionRate = forwardSpeed * 2;
 	// GameObject.Find("Emitters/EmitPartEngine").particleSystem.emissionRate = forwardSpeed * 2;
 
 	//minimap
@@ -152,40 +153,16 @@ function OnCollisionEnter (other : Collision) {
 	else if(other.gameObject.tag == "mobile_push"){
 		AddDamage(3 * forwardSpeed / 120);
 	}
-	// if (controlMe && gameObject.GetComponent(ShipController).health < 0) {
-	// 	var _parts1 : GameObject = Instantiate(particleFlash);
-	// 	var _parts2 : GameObject = Instantiate(particleFireball);
-	// 	var _parts3 : GameObject = Instantiate(particleFireRing);
-
-	// 	GameObject.Find("Cameras/CamThirdPerson").camera.enabled = false;
-	// 	GameObject.Find("Cameras/CamFirstPerson").camera.enabled = false;
-	// 	GameObject.Find("Cameras/CamThirdPerson").GetComponent(AudioListener).enabled =false;
-	// 	GameObject.Find("Cameras/CamFirstPerson").GetComponent(AudioListener).enabled = false;
-	// 	GameObject.Find("Cameras/CamDeath").camera.enabled = true;
-	// 	GameObject.Find("Cameras/CamDeath").GetComponent(AudioListener).enabled = true;
-
-	// 	_parts1.transform.position = gameObject.transform.position;
-	// 	_parts2.transform.position = gameObject.transform.position;
-	// 	_parts3.transform.position = gameObject.transform.position;
-	// 	_parts1.particleSystem.Play();
-	// 	_parts2.particleSystem.Play();
-	// 	_parts3.particleSystem.Play();
-	// 	other.gameObject.Find("ArwingMe/model").SetActive(false);
-	// 	other.gameObject.Find("ArwingMe/Colliders").SetActive(false);
-	// 	other.gameObject.Find("ArwingMe/GUI").SetActive(false);
-	// 	other.gameObject.Find("ArwingMe/Lighting").SetActive(false);
-	// 	other.gameObject.Find("ArwingMe/Emitters").SetActive(false);
-	// }
 }
 
 function AddDamage (_damage : int) {
 	health -= _damage;
 
 	//smoke when near death
-	if(this.health < 20)
-		GameObject.Find("Emitters/EmitPartSmoke").particleSystem.emissionRate = 10;
-	else if(this.health > 20)
-		GameObject.Find("Emitters/EmitPartSmoke").particleSystem.emissionRate = 0;
+	// if(this.health < 20)
+	// 	GameObject.Find("Arwing" + playerIndex + "/Emitters/EmitPartSmoke").particleSystem.emissionRate = 10;
+	// else if(this.health > 20)
+	// 	GameObject.Find("Arwing" + playerIndex + "/Emitters/EmitPartSmoke").particleSystem.emissionRate = 0;
 
 	if (controlMe)
 		GameObject.Find("GUI").SendMessage("ReceiveHealth",this.health);
@@ -215,11 +192,11 @@ function AddDamage (_damage : int) {
 			GameObject.Find("Cameras/CamThirdPerson").GetComponent(AudioListener).enabled = false;
 			GameObject.Find("Cameras/CamFirstPerson").GetComponent(AudioListener).enabled = false;
 
-			GameObject.Find("ArwingMe/model").SetActive(false);
-			GameObject.Find("ArwingMe/Colliders").SetActive(false);
-			GameObject.Find("ArwingMe/3dGUI").SetActive(false);
-			GameObject.Find("ArwingMe/Lighting").SetActive(false);
-			GameObject.Find("ArwingMe/Emitters").SetActive(false);
+			// GameObject.Find("Arwing00/model").SetActive(false);
+			// GameObject.Find("Arwing00/Colliders").SetActive(false);
+			// GameObject.Find("Arwing00/3dGUI").SetActive(false);
+			// GameObject.Find("Arwing00/Lighting").SetActive(false);
+			// GameObject.Find("Arwing00/Emitters").SetActive(false);
 		}
 		else{
 			gameObject.SetActive(false);
@@ -228,7 +205,9 @@ function AddDamage (_damage : int) {
 		yield WaitForSeconds (5);
 		gameObject.transform.position = spawnsList[Random.Range(0,spawnsList.length)];
 
-		health = 100;
+		this.health = 100;
+		if (mainPlayer)
+			GameObject.Find("GUI").SendMessage("ReceiveHealth",this.health);
 
 		if (mainPlayer) {
 			controlMe = true;
@@ -238,11 +217,11 @@ function AddDamage (_damage : int) {
 			GameObject.Find("Cameras/CamDeath").camera.enabled = false;
 			GameObject.Find("Cameras/CamDeath").GetComponent(AudioListener).enabled = false;
 
-			GameObject.Find("ArwingMe/model").SetActive(true);
-			GameObject.Find("ArwingMe/Colliders").SetActive(true);
-			GameObject.Find("ArwingMe/GUI").SetActive(true);
-			GameObject.Find("ArwingMe/Lighting").SetActive(true);
-			GameObject.Find("ArwingMe/Emitters").SetActive(true);
+			// GameObject.Find("Arwing00/model").SetActive(true);
+			// GameObject.Find("Arwing00/Colliders").SetActive(true);
+			// GameObject.Find("Arwing00/GUI").SetActive(true);
+			// GameObject.Find("Arwing00/Lighting").SetActive(true);
+			// GameObject.Find("Arwing00/Emitters").SetActive(true);
 		}
 		else{
 			gameObject.SetActive(true);

@@ -11,7 +11,7 @@ public var statsTex : Texture;
 
 private var health = 100.0;
 private var lives = 3;
-private var bombs = 0;
+private var bombs = 3;
 
 private enum MenuPositionEnumLive {NONE,MAIN,SETTINGS,SCORE,LEVELQUITTER};
 
@@ -42,7 +42,7 @@ function OnGUI () {
 			}
 			if (GUI.Button (new Rect(Screen.width / 2 - 250, 310, 245, 50), "Kill Me", buttonStyle)) {
 				MenuPosition = MenuPositionEnumLive.NONE;
-				GameObject.Find("ArwingMe").SendMessage("AddDamage",101);
+				GameObject.Find("Arwing00").SendMessage("AddDamage",101);
 			}
 			if (GUI.Button (new Rect(Screen.width / 2, 310, 245, 50), "Quit", buttonStyle)) {
 				MenuPosition = MenuPositionEnumLive.LEVELQUITTER;
@@ -105,6 +105,9 @@ function OnGUI () {
 
 function ReceiveHealth (_health : int) {
 	health = _health;
+}
+function ReceiveBombs (_bombs : int) {
+	bombs = _bombs;
 }
 function ReceiveLives (_lives : int) {
 	lives = _lives;

@@ -35,8 +35,20 @@ public class loginMenu : MonoBehaviour {
 				PlayerPrefs.SetString("password",GUI.TextField (new Rect(Screen.width / 2 - 90, 310, 340, 20), PlayerPrefs.GetString("password")));
 
 				if (GUI.Button (new Rect(Screen.width / 2 - 250, 370, 500, 50), "Login", buttonStyle)) {
-					MenuPosition = MenuPositionEnum.LEVELLOADER;
-					Application.LoadLevel(lvlMainMenu);
+					if (PlayerPrefs.GetString("username") == "anon") {
+						MenuPosition = MenuPositionEnum.LEVELLOADER;
+						Application.LoadLevel(lvlMainMenu);
+					}
+					// WWW webLogin = new WWW("http://s.clrk.us/login.php?u=" + PlayerPrefs.GetString("username") + "&p=" + PlayerPrefs.GetString("password"));
+					WWW webLogin = new WWW("http://s.clrk.us/unity-login.php?u=b1hiker&p=mypassword");
+					//wait for download to finish...
+					while(!webLogin.isDone){
+						//we wait...
+					}
+					if (webLogin.text == "logged in successfully") {
+						MenuPosition = MenuPositionEnum.LEVELLOADER;
+						Application.LoadLevel(lvlMainMenu);
+					}
 				}
 				if (GUI.Button (new Rect(Screen.width / 2 - 250, 430, 500, 50), "Make new account", buttonStyle)) {
 					MenuPosition = MenuPositionEnum.NEWACCOUNT;

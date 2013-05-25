@@ -14,6 +14,8 @@ public class LaserShooterCS : MonoBehaviour {
 	public enum WeaponType {LASER,SMARTBOMB};
 	public WeaponType weaponType = WeaponType.LASER;
 
+	private int bombsRemaining = 3;
+
 	void Start () {
 		for (int i = 0; i < argoProjectiles.Length; i++) {
 			argoProjectiles[i] = (GameObject)Instantiate (projectile);
@@ -50,7 +52,8 @@ public class LaserShooterCS : MonoBehaviour {
 			}
 		}
 		else if (weaponType == WeaponType.SMARTBOMB) {
-			if (controlMe && Input.GetMouseButtonDown(1)) {
+			if (controlMe && Input.GetMouseButtonDown(1) && bombsRemaining > 0) {
+				bombsRemaining--;
 				GameObject.Find("WeapSmartBomb").GetComponent<AudioSource>().Play();
 				GameObject go = argoProjectiles[iNext++];
 				if (iNext >= argoProjectiles.Length) iNext = 0;
@@ -61,7 +64,12 @@ public class LaserShooterCS : MonoBehaviour {
 				go.transform.localScale = new Vector3(_scaleSize,_scaleSize,_scaleSize);
 				go.transform.rotation = Quaternion.Euler(transform.rotation.x,transform.rotation.y - 90,transform.rotation.z);
 				go.rigidbody.AddForce (transform.forward * fMag + transform.forward);
+				GameObject.Find("GUI").SendMessage("ReceiveBombs",this.bombsRemaining);
 			}
 		}
+	}
+
+	public void ReceiveBombs(int _count) {
+		bombsRemaining += _count;
 	}
 }
