@@ -67,7 +67,7 @@ function FixedUpdate () {
 	if(controlMe && Input.GetKeyDown(KeyCode.S)){
 		// arwing.camThirdPerson.transform.Rotate(-3,0,0);
 	}
-	if(controlMe && Input.GetKeyDown(KeyCode.F1) && controlMe){
+	if(controlMe && Input.GetKeyDown(KeyCode.F1)){
 		GameObject.Find("Cameras/CamThirdPerson").camera.enabled = GameObject.Find("Cameras/CamFirstPerson").camera.enabled;
 		GameObject.Find("Cameras/CamFirstPerson").camera.enabled = !GameObject.Find("Cameras/CamThirdPerson").camera.enabled;
 		GameObject.Find("Cameras/CamThirdPerson").GetComponent(AudioListener).enabled = GameObject.Find("Cameras/CamFirstPerson").GetComponent(AudioListener).enabled;
@@ -119,6 +119,7 @@ function FixedUpdate () {
 			// arwing.tailLights.GetComponent(MeshRenderer).enabled = true;
 		// 	arwing.engineLight.GetComponent(TrailRenderer).enabled = true;
 		// }
+		GameObject.Find("Cameras/CamThirdPerson").camera.fieldOfView = 45 + (forwardSpeed / 4);
 	}
 	if(controlMe && Input.GetKey(KeyCode.LeftShift) && forwardSpeed > 0){
 		forwardSpeed -= .45;
@@ -126,6 +127,7 @@ function FixedUpdate () {
 			// arwing.tailLights.GetComponent(MeshRenderer).enabled = false;
 		// 	arwing.engineLight.GetComponent(TrailRenderer).enabled = false;
 		// }
+		GameObject.Find("Cameras/CamThirdPerson").camera.fieldOfView = 45 + (forwardSpeed / 4);
 	}
 	transform.position += (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward;
 	GameObject.Find("Arwing" + playerIndex + "/Lighting/LightEngine").light.intensity = forwardSpeed / 120 * 7.7 + 0.3;
