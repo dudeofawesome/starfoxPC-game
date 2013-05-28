@@ -8,6 +8,7 @@ public var rollSpeed = 0.0;
 public var pitchSpeed = 0.0;
 public var health : int = 100;
 public var lives : int = 3;
+public var hue : int = 190;
 
 public var particleFlash : GameObject;
 public var particleFireball : GameObject;
@@ -16,7 +17,9 @@ public var particleFireRing : GameObject;
 private var spawnsList = new Array(new Vector3(250,38,-640),new Vector3(350,38,-640),new Vector3(300,38,-640));
 
 function Start () {
-
+	if (controlMe)
+		hue = PlayerPrefs.GetInt("color");
+	GameObject.Find("Arwing" + playerIndex + "/model/polygon1").renderer.material.color = new ColorHSVjs(hue,1f,1f).ToColor();
 }
 
 function Update () {
@@ -48,12 +51,16 @@ function Update () {
 function FixedUpdate () {
 	//key down
 	if(controlMe && Input.GetKeyDown(KeyCode.E)){
-		//barrel roll right
-		HOTween.To(transform, 0.7, "rotation", new Vector3(transform.rotation.eulerAngles.x,transform.rotation.eulerAngles.y,transform.rotation.eulerAngles.z + 179));
+
 	}
 	if(controlMe && Input.GetKeyDown(KeyCode.Q)){
+
+	}
+	if(controlMe && Input.GetKeyDown(KeyCode.F)){
 		//barrel roll right
-		HOTween.To(transform, 0.7, "rotation", new Vector3(transform.rotation.eulerAngles.x,transform.rotation.eulerAngles.y,transform.rotation.eulerAngles.z - 179));
+		HOTween.To(transform, 0.7, "rotation", new Vector3(transform.rotation.eulerAngles.x,transform.rotation.eulerAngles.y,transform.rotation.eulerAngles.z + 179));
+		// yield 0.7;
+		// HOTween.To(transform, 0.7, "rotation", new Vector3(transform.rotation.eulerAngles.x,transform.rotation.eulerAngles.y,transform.rotation.eulerAngles.z + 179));
 	}
 	if(controlMe && Input.GetKeyDown(KeyCode.D)){
 		// arwing.camThirdPerson.transform.Rotate(0,0,-3);
@@ -97,23 +104,29 @@ function FixedUpdate () {
 	}
 
 	//key pressed
-	if(controlMe && Input.GetKey(KeyCode.D)){
+	if (controlMe && Input.GetKey(KeyCode.D)) {
 		rollSpeed += 1;
 		transform.Rotate(0,0,-2 * 1 / (1 + 5 * Mathf.Pow(0.82,rollSpeed - 6)) - 0.1666);
 	}
-	if(controlMe && Input.GetKey(KeyCode.A)){
+	if (controlMe && Input.GetKey(KeyCode.A)) {
 		rollSpeed += 1;
 		transform.Rotate(0,0,2 * 1 / (1 + 5 * Mathf.Pow(0.82,rollSpeed - 6)) - 0.1666);
 	}
-	if(controlMe && Input.GetKey(KeyCode.W)){
+	if (controlMe && Input.GetKey(KeyCode.W)) {
 		pitchSpeed += 1;
 		transform.Rotate(1 * 1 / (1 + 5 * Mathf.Pow(0.82,pitchSpeed - 6)) - 0.1666,0,0);
 	}
-	if(controlMe && Input.GetKey(KeyCode.S)){
+	if (controlMe && Input.GetKey(KeyCode.S)) {
 		pitchSpeed += 1;
 		transform.Rotate(-1 * 1 / (1 + 5 * Mathf.Pow(0.82,pitchSpeed - 6)) - 0.1666,0,0);
 	}
-	if(controlMe && Input.GetKey(KeyCode.Space) && forwardSpeed < 120){
+	if (controlMe && Input.GetKey(KeyCode.Q)) {
+		transform.Rotate(0,-0.3,0);
+	}
+	if (controlMe && Input.GetKey(KeyCode.E)) {
+		transform.Rotate(0,0.3,0);
+	}
+	if (controlMe && Input.GetKey(KeyCode.Space) && forwardSpeed < 120) {
 		forwardSpeed += .3;
 		// if(forwardSpeed > 0){
 			// arwing.tailLights.GetComponent(MeshRenderer).enabled = true;
@@ -121,7 +134,7 @@ function FixedUpdate () {
 		// }
 		GameObject.Find("Cameras/CamThirdPerson").camera.fieldOfView = 45 + (forwardSpeed / 4);
 	}
-	if(controlMe && Input.GetKey(KeyCode.LeftShift) && forwardSpeed > 0){
+	if (controlMe && Input.GetKey(KeyCode.LeftShift) && forwardSpeed > 0) {
 		forwardSpeed -= .45;
 		// if(forwardSpeed < 0){
 			// arwing.tailLights.GetComponent(MeshRenderer).enabled = false;
@@ -180,10 +193,18 @@ function AddDamage (_damage : int) {
 		_parts1.transform.position = gameObject.transform.position;
 		_parts2.transform.position = gameObject.transform.position;
 		_parts3.transform.position = gameObject.transform.position;
-		_parts1.particleSystem.Play();
-		_parts2.particleSystem.Play();
-		_parts3.particleSystem.Play();
-		
+		// _parts1.particleSystem.Play();
+		// _parts2.particleSystem.Play();
+		// _parts3.particleSystem.Play();
+
+		for (var _colliderPart : Transform in GameObject.Find("Arwing" + playerIndex + "/Colliders").transform) {
+			_colliderPart.collider.enabled = false;
+		}
+
+		for (var _rendererPart : Transform in GameObject.Find("Arwing" + playerIndex + "/model").transform) {
+			_rendererPart.renderer.enabled = false;
+		}
+
 		if (controlMe) {
 			GameObject.Find("GUI").SendMessage("ReceiveLives",this.lives);
 
@@ -201,17 +222,26 @@ function AddDamage (_damage : int) {
 			// GameObject.Find("Arwing00/Emitters").SetActive(false);
 		}
 		else{
-			gameObject.SetActive(false);
+			//gameObject.SetActive(false);
 		}
 
 		yield WaitForSeconds (5);
 		gameObject.transform.position = spawnsList[Random.Range(0,spawnsList.length)];
 
 		this.health = 100;
-		if (mainPlayer)
-			GameObject.Find("GUI").SendMessage("ReceiveHealth",this.health);
+
+		for (var _colliderPart : Transform in GameObject.Find("Arwing" + playerIndex + "/Colliders").transform) {
+			_colliderPart.collider.enabled = true;
+		}
+
+		for (var _rendererPart : Transform in GameObject.Find("Arwing" + playerIndex + "/model").transform) {
+			_rendererPart.renderer.enabled = true;
+		}
+
 
 		if (mainPlayer) {
+			GameObject.Find("GUI").SendMessage("ReceiveHealth",this.health);
+
 			controlMe = true;
 
 			GameObject.Find("Cameras/CamThirdPerson").camera.enabled = true;
