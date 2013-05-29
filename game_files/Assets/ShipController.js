@@ -193,9 +193,13 @@ function AddDamage (_damage : int) {
 		_parts1.transform.position = gameObject.transform.position;
 		_parts2.transform.position = gameObject.transform.position;
 		_parts3.transform.position = gameObject.transform.position;
-		// _parts1.particleSystem.Play();
-		// _parts2.particleSystem.Play();
-		// _parts3.particleSystem.Play();
+		_parts1.particleSystem.Play();
+		_parts2.particleSystem.Play();
+		_parts3.particleSystem.Play();
+
+		gameObject.transform.position = new Vector3(-10000,0,0);
+
+		// GameObject.Find("Arwing" + playerIndex + "/Emitters/EmitTrail").GetComponent(TrailRenderer).enabled = false;
 
 		for (var _colliderPart : Transform in GameObject.Find("Arwing" + playerIndex + "/Colliders").transform) {
 			_colliderPart.collider.enabled = false;
@@ -214,19 +218,11 @@ function AddDamage (_damage : int) {
 			GameObject.Find("Cameras/CamFirstPerson").camera.enabled = false;
 			GameObject.Find("Cameras/CamThirdPerson").GetComponent(AudioListener).enabled = false;
 			GameObject.Find("Cameras/CamFirstPerson").GetComponent(AudioListener).enabled = false;
-
-			// GameObject.Find("Arwing00/model").SetActive(false);
-			// GameObject.Find("Arwing00/Colliders").SetActive(false);
-			// GameObject.Find("Arwing00/3dGUI").SetActive(false);
-			// GameObject.Find("Arwing00/Lighting").SetActive(false);
-			// GameObject.Find("Arwing00/Emitters").SetActive(false);
-		}
-		else{
-			//gameObject.SetActive(false);
 		}
 
-		yield WaitForSeconds (5);
+		yield WaitForSeconds(5);
 		gameObject.transform.position = spawnsList[Random.Range(0,spawnsList.length)];
+		gameObject.transform.LookAt(new Vector3(0,0,0));
 
 		this.health = 100;
 
@@ -235,7 +231,7 @@ function AddDamage (_damage : int) {
 		}
 
 		for (var _rendererPart : Transform in GameObject.Find("Arwing" + playerIndex + "/model").transform) {
-			_rendererPart.renderer.enabled = true;
+			if (_rendererPart.name != "polygon4" && _rendererPart.name != "polygon5" && _rendererPart.name != "polygon6" && _rendererPart.name != "polygon7" && _rendererPart.name != "polygon8") _rendererPart.renderer.enabled = true;
 		}
 
 
@@ -248,15 +244,9 @@ function AddDamage (_damage : int) {
 			GameObject.Find("Cameras/CamThirdPerson").GetComponent(AudioListener).enabled = true;
 			GameObject.Find("Cameras/CamDeath").camera.enabled = false;
 			GameObject.Find("Cameras/CamDeath").GetComponent(AudioListener).enabled = false;
-
-			// GameObject.Find("Arwing00/model").SetActive(true);
-			// GameObject.Find("Arwing00/Colliders").SetActive(true);
-			// GameObject.Find("Arwing00/GUI").SetActive(true);
-			// GameObject.Find("Arwing00/Lighting").SetActive(true);
-			// GameObject.Find("Arwing00/Emitters").SetActive(true);
 		}
 		else{
-			gameObject.SetActive(true);
+			// gameObject.SetActive(true);
 		}
 	}
 }

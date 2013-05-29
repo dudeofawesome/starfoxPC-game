@@ -44,11 +44,11 @@ public class LaserShooterCS : MonoBehaviour {
 				go.SetActive (true);
 				go.rigidbody.velocity = Vector3.zero;
 				float _scaleSize = 19f / (1f + Mathf.Pow(0.1f, chargeTime - 2f)) + 1f;
-				go.transform.position = transform.position + transform.forward * _scaleSize;
+				go.transform.position = transform.position + transform.forward * 2 * _scaleSize;
 				go.transform.localScale = new Vector3(_scaleSize,_scaleSize,_scaleSize);
-				go.transform.rotation = Quaternion.Euler(transform.rotation.x,transform.rotation.y - 90,transform.rotation.z);
+				go.transform.rotation = transform.rotation;
+				go.transform.Rotate(0,90,0);
 				go.rigidbody.AddForce (transform.forward * fMag + transform.forward);
-				//go.rigidbody.AddForce (transform.forward * fMag * GameObject.Find("arwing").GetComponent("ThirdPersonShipController").forwardSpeed);
 			}
 		}
 		else if (weaponType == WeaponType.SMARTBOMB) {
@@ -60,9 +60,10 @@ public class LaserShooterCS : MonoBehaviour {
 				go.SetActive (true);
 				go.rigidbody.velocity = Vector3.zero;
 				float _scaleSize = 19f / (1f + Mathf.Pow(0.1f, chargeTime - 2f)) + 1f;
-				go.transform.position = transform.position + transform.forward * _scaleSize;
+				go.transform.position = transform.position + transform.forward * 2 * _scaleSize;
 				go.transform.localScale = new Vector3(_scaleSize,_scaleSize,_scaleSize);
-				go.transform.rotation = Quaternion.Euler(transform.rotation.x,transform.rotation.y - 90,transform.rotation.z);
+				go.transform.rotation = transform.rotation;
+				go.transform.Rotate(0,180,0);
 				go.rigidbody.AddForce (transform.forward * fMag + transform.forward);
 				GameObject.Find("GUI").SendMessage("ReceiveBombs",this.bombsRemaining);
 			}
