@@ -111,20 +111,20 @@ public class loginMenu : MonoBehaviour {
 					if (userCaptcha == correctCaptcha) {
 						if (password == passwordConfirm) {
 							//server check
-							//http://s.clrk.us/unity-register.php?e=b.1hiker@gmail.com&u=screwthis&dn=bryanclark&p=password&pc=password  
-						WWW webLogin = new WWW("http://s.clrk.us/unity-register.php?e=" + email + "&u=" + username + "&d=" + fullName + "&h=" + hue + "&p=" + password);
-						//WWW webLogin = new WWW("http://s.clrk.us/unity-login.php?u=b1hiker&p=mypassword");
-						//wait for download to finish...
-						while(!webLogin.isDone){
-							//we wait...
-						}
-						if (webLogin.text == "username works\nAll golden") {
+							WWW webLogin = new WWW("http://s.clrk.us/unity-register.php?e=" + email + "&u=" + username + "&dn=" + fullName + "&p=" + password + "&h=" + hue);
+							//wait for download to finish...
+							while(!webLogin.isDone){
+								//we wait...
+							}
+							if (webLogin.text == "username works\nAll golden") {
 								MenuPosition = MenuPositionEnum.LOGIN;
 							}
 						}
 						else {
 							//MenuPosition = MenuPositionEnum.LOGIN;
 							//MenuPosition = MenuPositionEnum.NEWACCOUNT;
+							password = "Passwords did not match!";
+							passwordConfirm = "";
 						}
 					}
 					else {
@@ -132,6 +132,7 @@ public class loginMenu : MonoBehaviour {
 						_num1 = Random.Range(0,10);
 						_num2 = Random.Range(5,20);
 						_num3 = Random.Range(-3,3);
+						userCaptcha = "Invalid captcha";
 					}
 				}
 			break;

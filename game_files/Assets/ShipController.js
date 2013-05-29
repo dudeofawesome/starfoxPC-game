@@ -197,7 +197,8 @@ function AddDamage (_damage : int) {
 		_parts2.particleSystem.Play();
 		_parts3.particleSystem.Play();
 
-		gameObject.transform.position = new Vector3(-10000,0,0);
+		//gameObject.transform.position = new Vector3(-10000,0,0);
+		this.health = 500;
 
 		// GameObject.Find("Arwing" + playerIndex + "/Emitters/EmitTrail").GetComponent(TrailRenderer).enabled = false;
 
