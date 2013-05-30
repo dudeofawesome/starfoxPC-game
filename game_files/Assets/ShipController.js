@@ -173,6 +173,8 @@ function OnCollisionEnter (other : Collision) {
 function AddDamage (_damage : int) {
 	health -= _damage;
 
+	print(playerIndex + " " + health);
+
 	//smoke when near death
 	// if(this.health < 20)
 	// 	GameObject.Find("Arwing" + playerIndex + "/Emitters/EmitPartSmoke").particleSystem.emissionRate = 10;
