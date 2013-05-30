@@ -176,17 +176,15 @@ function AddDamage (_damage : int) {
 	print(playerIndex + " " + health);
 
 	//smoke when near death
-	// if(this.health < 20)
-	// 	GameObject.Find("Arwing" + playerIndex + "/Emitters/EmitPartSmoke").particleSystem.emissionRate = 10;
-	// else if(this.health > 20)
-	// 	GameObject.Find("Arwing" + playerIndex + "/Emitters/EmitPartSmoke").particleSystem.emissionRate = 0;
+	if(this.health < 20)
+		GameObject.Find("Arwing" + playerIndex + "/Emitters/EmitPartSmoke").particleSystem.emissionRate = 10;
+	else if(this.health > 20)
+		GameObject.Find("Arwing" + playerIndex + "/Emitters/EmitPartSmoke").particleSystem.emissionRate = 0;
 
 	if (controlMe)
 		GameObject.Find("GUI").SendMessage("ReceiveHealth",this.health);
 
 	if (gameObject.GetComponent(ShipController).health < 0) {
-		var mainPlayer : boolean = controlMe;
-
 		lives --;
 		var _parts1 : GameObject = Instantiate(particleFlash);
 		var _parts2 : GameObject = Instantiate(particleFireball);
@@ -199,10 +197,7 @@ function AddDamage (_damage : int) {
 		_parts2.particleSystem.Play();
 		_parts3.particleSystem.Play();
 
-		//gameObject.transform.position = new Vector3(-10000,0,0);
 		this.health = 500;
-
-		// GameObject.Find("Arwing" + playerIndex + "/Emitters/EmitTrail").GetComponent(TrailRenderer).enabled = false;
 
 		for (var _colliderPart : Transform in GameObject.Find("Arwing" + playerIndex + "/Colliders").transform) {
 			_colliderPart.collider.enabled = false;
@@ -211,6 +206,8 @@ function AddDamage (_damage : int) {
 		for (var _rendererPart : Transform in GameObject.Find("Arwing" + playerIndex + "/model").transform) {
 			_rendererPart.renderer.enabled = false;
 		}
+
+		var _controlMe : boolean = controlMe;
 
 		if (controlMe) {
 			GameObject.Find("GUI").SendMessage("ReceiveLives",this.lives);
@@ -224,10 +221,14 @@ function AddDamage (_damage : int) {
 		}
 
 		yield WaitForSeconds(5);
+
+		//respawn
 		gameObject.transform.position = spawnsList[Random.Range(0,spawnsList.length)];
 		gameObject.transform.LookAt(new Vector3(0,0,0));
 
 		this.health = 100;
+		this.forwardSpeed = 50;
+		GameObject.Find("Arwing" + playerIndex + "/Emitters/EmitPartSmoke").particleSystem.emissionRate = 0;
 
 		for (var _colliderPart : Transform in GameObject.Find("Arwing" + playerIndex + "/Colliders").transform) {
 			_colliderPart.collider.enabled = true;
@@ -237,19 +238,16 @@ function AddDamage (_damage : int) {
 			if (_rendererPart.name != "polygon4" && _rendererPart.name != "polygon5" && _rendererPart.name != "polygon6" && _rendererPart.name != "polygon7" && _rendererPart.name != "polygon8") _rendererPart.renderer.enabled = true;
 		}
 
-
-		if (mainPlayer) {
+		if (_controlMe) {
 			GameObject.Find("GUI").SendMessage("ReceiveHealth",this.health);
 
-			controlMe = true;
-
+			GameObject.Find("Cameras/CamThirdPerson").camera.fieldOfView = 57.5;
 			GameObject.Find("Cameras/CamThirdPerson").camera.enabled = true;
 			GameObject.Find("Cameras/CamThirdPerson").GetComponent(AudioListener).enabled = true;
 			GameObject.Find("Cameras/CamDeath").camera.enabled = false;
 			GameObject.Find("Cameras/CamDeath").GetComponent(AudioListener).enabled = false;
-		}
-		else{
-			// gameObject.SetActive(true);
+
+			controlMe = _controlMe;
 		}
 	}
 }

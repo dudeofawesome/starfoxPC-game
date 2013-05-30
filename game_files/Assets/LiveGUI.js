@@ -11,7 +11,7 @@ public var statsTex : Texture;
 
 private var health = 100.0;
 private var lives = 3;
-private var bombs = 3;
+private var bombs = 1;
 
 private enum MenuPositionEnumLive {NONE,MAIN,SETTINGS,SCORE,LEVELQUITTER};
 

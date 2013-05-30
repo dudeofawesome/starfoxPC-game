@@ -14,7 +14,7 @@ public class LaserShooterCS : MonoBehaviour {
 	public enum WeaponType {LASER,SMARTBOMB};
 	public WeaponType weaponType = WeaponType.LASER;
 
-	private int bombsRemaining = 3;
+	private int bombsRemaining = 1;
 
 	void Start () {
 		for (int i = 0; i < argoProjectiles.Length; i++) {

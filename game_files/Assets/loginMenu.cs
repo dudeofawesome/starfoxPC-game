@@ -9,7 +9,7 @@ public class loginMenu : MonoBehaviour {
 	public GUIStyle titleLabelStyle;
 	public GUIStyle descLabelStyle;
 
-	public enum MenuPositionEnum {LOGIN,NEWACCOUNT,LEVELLOADER};
+	public enum MenuPositionEnum {LOGIN,NEWACCOUNT,LEVELLOADER,LOGINNOINTERNET};
 
 	public MenuPositionEnum MenuPosition = MenuPositionEnum.LOGIN;
 
@@ -65,11 +65,53 @@ public class loginMenu : MonoBehaviour {
 						Application.LoadLevel(lvlMainMenu);
 					}
 					else {
-						print(webLogin.text);
+						if (webLogin.text == "") {
+							MenuPosition = MenuPositionEnum.LOGINNOINTERNET;
+						}
 					}
 				}
 				if (GUI.Button (new Rect(Screen.width / 2 - 250, 430, 500, 50), "Make new account", buttonStyle)) {
 					MenuPosition = MenuPositionEnum.NEWACCOUNT;
+				}
+				if (GUI.Button (new Rect(Screen.width / 2 - 250, Screen.height - 70, 500, 50), "Exit", buttonStyle)) {
+					MenuPosition = MenuPositionEnum.LEVELLOADER;
+					Application.Quit();
+				}
+			break;
+			case MenuPositionEnum.LOGINNOINTERNET :
+				GUI.Label (new Rect(Screen.width / 2 - 50, 70, 100, 30), "Starfox PC", titleLabelStyle);
+
+				GUI.Label (new Rect(Screen.width / 2 - 250, 250, 500, 30), "Username", descLabelStyle);
+				PlayerPrefs.SetString("username",GUI.TextField (new Rect(Screen.width / 2 - 90, 250, 340, 20), PlayerPrefs.GetString("username")));
+				GUI.Label (new Rect(Screen.width / 2 - 250, 310, 500, 30), "Password", descLabelStyle);
+				PlayerPrefs.SetString("password",GUI.TextField (new Rect(Screen.width / 2 - 90, 310, 340, 20), PlayerPrefs.GetString("password")));
+
+				if (GUI.Button (new Rect(Screen.width / 2 - 250, 370, 500, 50), "Login", buttonStyle)) {
+					if (PlayerPrefs.GetString("username") == "anon") {
+						MenuPosition = MenuPositionEnum.LEVELLOADER;
+						Application.LoadLevel(lvlMainMenu);
+					}
+					WWW webLogin = new WWW("http://s.clrk.us/unity-login.php?u=" + PlayerPrefs.GetString("username") + "&p=" + PlayerPrefs.GetString("password"));
+					//wait for download to finish...
+					while(!webLogin.isDone){
+						//we wait...
+					}
+					if (webLogin.text == "username works\nAll golden") {
+						MenuPosition = MenuPositionEnum.LEVELLOADER;
+						PlayerPrefs.SetString("username","anon");
+						PlayerPrefs.SetString("realname","anon");
+						PlayerPrefs.SetInt("color",200);
+						Application.LoadLevel(lvlMainMenu);
+					}
+					else {
+						if (webLogin.text == "") {
+							MenuPosition = MenuPositionEnum.LOGINNOINTERNET;
+						}
+					}
+				}
+				if (GUI.Button (new Rect(Screen.width / 2 - 250, 430, 500, 50), "Anonymous Login", buttonStyle)) {
+					MenuPosition = MenuPositionEnum.LEVELLOADER;
+					Application.LoadLevel(lvlMainMenu);
 				}
 				if (GUI.Button (new Rect(Screen.width / 2 - 250, Screen.height - 70, 500, 50), "Exit", buttonStyle)) {
 					MenuPosition = MenuPositionEnum.LEVELLOADER;
@@ -111,20 +153,23 @@ public class loginMenu : MonoBehaviour {
 					if (userCaptcha == correctCaptcha) {
 						if (password == passwordConfirm) {
 							//server check
-							WWW webLogin = new WWW("http://s.clrk.us/unity-register.php?e=" + email + "&u=" + username + "&dn=" + fullName + "&p=" + password + "&h=" + hue);
+							//http://s.clrk.us/unity-register.php?e=b.1hiker@gmail.com&u=screwthis&dn=bryanclark&p=password&pc=password  
+							WWW webLogin = new WWW("http://s.clrk.us/unity-register.php?e=" + email + "&u=" + username + "&dn=" + fullName + "&h=" + hue + "&p=" + password + "&pc=" + password);
 							//wait for download to finish...
 							while(!webLogin.isDone){
 								//we wait...
 							}
-							if (webLogin.text == "username works\nAll golden") {
-								MenuPosition = MenuPositionEnum.LOGIN;
+							if (webLogin.text == "[X]\nYou have successfully registered. You can now login here.") {
+									MenuPosition = MenuPositionEnum.LOGIN;
 							}
-						}
-						else {
-							//MenuPosition = MenuPositionEnum.LOGIN;
-							//MenuPosition = MenuPositionEnum.NEWACCOUNT;
-							password = "Passwords did not match!";
-							passwordConfirm = "";
+							else {
+								print(webLogin.text);
+								if (webLogin.text == "") {
+									MenuPosition = MenuPositionEnum.LOGINNOINTERNET;
+								}
+								//MenuPosition = MenuPositionEnum.LOGIN;
+								//MenuPosition = MenuPositionEnum.NEWACCOUNT;
+							}
 						}
 					}
 					else {
@@ -132,7 +177,6 @@ public class loginMenu : MonoBehaviour {
 						_num1 = Random.Range(0,10);
 						_num2 = Random.Range(5,20);
 						_num3 = Random.Range(-3,3);
-						userCaptcha = "Invalid captcha";
 					}
 				}
 			break;
