@@ -4,6 +4,8 @@ public var particleFlash : GameObject;
 public var particleFireball : GameObject;
 public var particleFireRing : GameObject;
 
+public var damageMultiplier : int = 1;
+
 // Use this for initialization
 function Start () {
 
@@ -30,7 +32,7 @@ function OnCollisionEnter (other : Collision)
 		Destroy(other.gameObject);
 	}
 	else if (other.gameObject.layer == 9/*Players*/) {
-		other.gameObject.SendMessage("AddDamage",5);
+		other.gameObject.SendMessage("AddDamage",5 * damageMultiplier);
 	}
 	else if (other.gameObject.name == "smart_bomb") {
 		_parts1.transform.position = other.gameObject.transform.position;
@@ -42,4 +44,8 @@ function OnCollisionEnter (other : Collision)
 		Destroy(other.gameObject);
 	}
 	Destroy(gameObject);
+}
+
+function ReceiveDamageMultiplier (_newMultiplier : int) {
+	damageMultiplier = _newMultiplier;
 }

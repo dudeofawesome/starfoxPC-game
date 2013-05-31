@@ -14,15 +14,14 @@ public class LaserShooterCS : MonoBehaviour {
 	public enum WeaponType {LASER,SMARTBOMB};
 	public WeaponType weaponType = WeaponType.LASER;
 
+	public int damageMultiplier = 1;
+
 	private int bombsRemaining = 1;
 
 	void Start () {
 		for (int i = 0; i < argoProjectiles.Length; i++) {
 			argoProjectiles[i] = (GameObject)Instantiate (projectile);
 			argoProjectiles[i].SetActive (false);
-			// argoProjectiles[i].AddComponent<Rigidbody>();
-			// argoProjectiles[i].AddComponent<BoxCollider>();
-			// argoProjectiles[i].GetComponent<Rigidbody>().mass = 50;
 		}
 	}
 
@@ -45,10 +44,11 @@ public class LaserShooterCS : MonoBehaviour {
 				go.rigidbody.velocity = Vector3.zero;
 				float _scaleSize = 19f / (1f + Mathf.Pow(0.1f, chargeTime - 2f)) + 1f;
 				go.transform.position = transform.position + transform.forward * 2 * _scaleSize;
-				go.transform.localScale = new Vector3(_scaleSize,_scaleSize,_scaleSize);
+				go.transform.localScale = new Vector3 (_scaleSize,_scaleSize,_scaleSize);
 				go.transform.rotation = transform.rotation;
-				go.transform.Rotate(0,90,0);
+				go.transform.Rotate (0,90,0);
 				go.rigidbody.AddForce (transform.forward * fMag + transform.forward);
+				go.SendMessage ("ReceiveDamageMultiplier",damageMultiplier);
 			}
 		}
 		else if (weaponType == WeaponType.SMARTBOMB) {
@@ -72,5 +72,10 @@ public class LaserShooterCS : MonoBehaviour {
 
 	public void ReceiveBombs(int _count) {
 		bombsRemaining += _count;
+		GameObject.Find("GUI").SendMessage("ReceiveBombs",this.bombsRemaining);
+	}
+
+	public void ReceiveDamageMultiplier (int _newMultiplier) {
+		damageMultiplier += _newMultiplier;
 	}
 }

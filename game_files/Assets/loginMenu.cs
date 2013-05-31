@@ -47,7 +47,7 @@ public class loginMenu : MonoBehaviour {
 				GUI.Label (new Rect(Screen.width / 2 - 250, 250, 500, 30), "Username", descLabelStyle);
 				PlayerPrefs.SetString("username",GUI.TextField (new Rect(Screen.width / 2 - 90, 250, 340, 20), PlayerPrefs.GetString("username")));
 				GUI.Label (new Rect(Screen.width / 2 - 250, 310, 500, 30), "Password", descLabelStyle);
-				PlayerPrefs.SetString("password",GUI.TextField (new Rect(Screen.width / 2 - 90, 310, 340, 20), PlayerPrefs.GetString("password")));
+				PlayerPrefs.SetString("password",GUI.PasswordField (new Rect(Screen.width / 2 - 90, 310, 340, 20), PlayerPrefs.GetString("password"),"*"[0]));
 
 				if (GUI.Button (new Rect(Screen.width / 2 - 250, 370, 500, 50), "Login", buttonStyle)) {
 					if (PlayerPrefs.GetString("username") == "anon") {
@@ -84,7 +84,7 @@ public class loginMenu : MonoBehaviour {
 				GUI.Label (new Rect(Screen.width / 2 - 250, 250, 500, 30), "Username", descLabelStyle);
 				PlayerPrefs.SetString("username",GUI.TextField (new Rect(Screen.width / 2 - 90, 250, 340, 20), PlayerPrefs.GetString("username")));
 				GUI.Label (new Rect(Screen.width / 2 - 250, 310, 500, 30), "Password", descLabelStyle);
-				PlayerPrefs.SetString("password",GUI.TextField (new Rect(Screen.width / 2 - 90, 310, 340, 20), PlayerPrefs.GetString("password")));
+				PlayerPrefs.SetString("password",GUI.PasswordField (new Rect(Screen.width / 2 - 90, 310, 340, 20), PlayerPrefs.GetString("password"),"*"[0]));
 
 				if (GUI.Button (new Rect(Screen.width / 2 - 250, 370, 500, 50), "Login", buttonStyle)) {
 					if (PlayerPrefs.GetString("username") == "anon") {
@@ -131,10 +131,10 @@ public class loginMenu : MonoBehaviour {
 				username = GUI.TextField (new Rect(Screen.width / 2 - 90, 300, 340, 20), username);
 
 				GUI.Label (new Rect(Screen.width / 2 - 250, 360, 500, 30), "Password", descLabelStyle);
-				password = GUI.TextField (new Rect(Screen.width / 2 - 90, 360, 340, 20), password);
+				password = GUI.PasswordField (new Rect(Screen.width / 2 - 90, 360, 340, 20), password, "*"[0]);
 
 				GUI.Label (new Rect(Screen.width / 2 - 250, 420, 500, 30), "Password", descLabelStyle);
-				passwordConfirm = GUI.TextField (new Rect(Screen.width / 2 - 90, 420, 340, 20), passwordConfirm);
+				passwordConfirm = GUI.PasswordField (new Rect(Screen.width / 2 - 90, 420, 340, 20), passwordConfirm, "*"[0]);
 
 				GUI.Label (new Rect(Screen.width / 2 - 250, 480, 500, 50), "Color", descLabelStyle);
 				PlayerPrefs.SetInt("color",(int) GUI.HorizontalSlider (new Rect(Screen.width / 2 - 150, 490, 400, 20), PlayerPrefs.GetInt("color"), 0.0f, 255.0f));
@@ -153,7 +153,6 @@ public class loginMenu : MonoBehaviour {
 					if (userCaptcha == correctCaptcha) {
 						if (password == passwordConfirm) {
 							//server check
-							//http://s.clrk.us/unity-register.php?e=b.1hiker@gmail.com&u=screwthis&dn=bryanclark&p=password&pc=password  
 							WWW webLogin = new WWW("http://s.clrk.us/unity-register.php?e=" + email + "&u=" + username + "&dn=" + fullName + "&h=" + hue + "&p=" + password + "&pc=" + password);
 							//wait for download to finish...
 							while(!webLogin.isDone){

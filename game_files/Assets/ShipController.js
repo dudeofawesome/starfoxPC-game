@@ -9,6 +9,7 @@ public var pitchSpeed = 0.0;
 public var health : int = 100;
 public var lives : int = 3;
 public var hue : int = 190;
+public var laserDamageMultiplier : int = 1;
 
 public var particleFlash : GameObject;
 public var particleFireball : GameObject;
@@ -156,17 +157,32 @@ function FixedUpdate () {
 }
 
 function OnCollisionEnter (other : Collision) {
-	if(other.gameObject.tag == "immobile"){
+	if (other.gameObject.tag == "immobile") {
 		HOTween.To(transform, 0.3, "position", new Vector3(transform.position.x - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.x * 40,transform.position.y - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.y * 40,transform.position.z - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.z * 40));
 		AddDamage(15 * forwardSpeed / 120);
 	}
-	else if(other.gameObject.tag == "mobile"){
+	else if (other.gameObject.tag == "mobile") {
 		HOTween.To(transform, 0.3, "position", new Vector3(transform.position.x - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.x * 5,transform.position.y - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.y * 5,transform.position.z - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.z * 5));
 		// other.transform.AddForce(transform.forward);
 		AddDamage(5 * forwardSpeed / 120);
 	}
-	else if(other.gameObject.tag == "mobile_push"){
+	else if (other.gameObject.tag == "mobile_push") {
 		AddDamage(3 * forwardSpeed / 120);
+	}
+	else if (other.gameObject.tag == "pickup") {
+		if (other.gameObject.name == "smart_bomb_pickup") {
+			if (controlMe) {
+				GameObject.Find("Arwing00/WeaponsBanks/WeapSmartBomb").SendMessage("ReceiveBombs",1);
+			}
+			Destroy(other.gameObject);
+		}
+		if (other.gameObject.name == "laser_upgrade_pickup") {
+			if (controlMe) {
+				GameObject.Find("Arwing00/WeaponsBanks/WeapLaserLeft").SendMessage("ReceiveDamageMultiplier",1);
+				GameObject.Find("Arwing00/WeaponsBanks/WeapLaserRight").SendMessage("ReceiveDamageMultiplier",1);
+			}
+			Destroy(other.gameObject);
+		}
 	}
 }
 
@@ -250,4 +266,12 @@ function AddDamage (_damage : int) {
 			controlMe = _controlMe;
 		}
 	}
+}
+
+function ReceiveLife (_lives : int) {
+	lives += _lives;
+}
+
+function SetLives (_lives : int) {
+	lives = _lives;
 }
