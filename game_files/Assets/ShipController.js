@@ -10,6 +10,9 @@ public var health : int = 100;
 public var lives : int = 3;
 public var hue : int = 190;
 public var laserDamageMultiplier : int = 1;
+public var playerID : int = -1;
+public var username : String = "anon";
+public var linkToPic : String = "";
 
 public var particleFlash : GameObject;
 public var particleFireball : GameObject;
@@ -20,6 +23,19 @@ private var spawnsList = new Array(new Vector3(250,38,-640),new Vector3(350,38,-
 function Start () {
 	if (controlMe)
 		hue = PlayerPrefs.GetInt("color");
+	else {
+		var webData : WWW = new WWW("http://s.clrk.us/unity-gamestart.php?i=" + playerID);
+		//wait for download to finish...
+		while(!webData.isDone){
+			//we wait...
+		}
+		var _userInfo : String[] = webData.text.Split(","[0]);
+		if (webData.text != "" && webData.text != "failure") {
+			username = _userInfo[0];
+			hue = int.Parse(_userInfo[1]);
+			linkToPic = _userInfo[2];
+		}
+	}
 	GameObject.Find("Arwing" + playerIndex + "/model/polygon1").renderer.material.color = new ColorHSVjs(hue,1f,1f).ToColor();
 }
 
@@ -47,9 +63,7 @@ function Update () {
 		HOTween.To(GameObject.Find("Arwing" + playerIndex + "/Cameras/CamThirdPerson").camera, 0.3, "fieldOfView", 60);
 		HOTween.To(GameObject.Find("Arwing" + playerIndex + "/Cameras/CamFirstPerson").camera, 0.3, "fieldOfView", 60);
 	}
-}
 
-function FixedUpdate () {
 	//key down
 	if(controlMe && Input.GetKeyDown(KeyCode.E)){
 
@@ -111,7 +125,9 @@ function FixedUpdate () {
 		// arwing.camThirdPerson.transform.Rotate(3,0,0);
 		pitchSpeed = 0;
 	}
+}
 
+function FixedUpdate () {
 	//key pressed
 	if (controlMe && Input.GetKey(KeyCode.D)) {
 		rollSpeed += 1;
@@ -197,8 +213,6 @@ function OnCollisionEnter (other : Collision) {
 function AddDamage (_damage : int) {
 	health -= _damage;
 
-	print(playerIndex + " " + health);
-
 	//smoke when near death
 	if(this.health < 20)
 		GameObject.Find("Arwing" + playerIndex + "/Emitters/EmitPartSmoke").particleSystem.emissionRate = 10;
@@ -210,6 +224,12 @@ function AddDamage (_damage : int) {
 
 	if (gameObject.GetComponent(ShipController).health < 0) {
 		lives --;
+
+		if (controlMe)
+			GameObject.Find("GUI").SendMessage("ReceiveDeathMessage","You have died.");
+		else
+			GameObject.Find("GUI").SendMessage("ReceiveDeathMessage","You killed " + this.username);
+
 		var _parts1 : GameObject = Instantiate(particleFlash);
 		var _parts2 : GameObject = Instantiate(particleFireball);
 		var _parts3 : GameObject = Instantiate(particleFireRing);

@@ -1,5 +1,7 @@
 #pragma strict
 
+import System.Collections.Generic;
+
 public var mainMenu : String;
 public var buttonStyle : GUIStyle;
 public var labelStyle : GUIStyle;
@@ -7,11 +9,16 @@ public var bombCountStyle : GUIStyle;
 public var livesCountStyle : GUIStyle;
 public var healthBarBase : GUIStyle;
 public var healthBarHead : GUIStyle;
+public var systemMessageStyle : GUIStyle;
+public var deathMessageStyle : GUIStyle;
 public var statsTex : Texture;
 
 private var health = 100.0;
 private var lives = 3;
 private var bombs = 1;
+
+private var deathMessages : List.<MessageJS> = new List.<MessageJS>();
+private var systemMessages : List.<MessageJS> = new List.<MessageJS>();
 
 private enum MenuPositionEnumLive {NONE,MAIN,SETTINGS,SCORE,LEVELQUITTER};
 
@@ -32,7 +39,24 @@ function Update () {
 
 function OnGUI () {
 	if(MenuPosition == MenuPositionEnumLive.NONE){
-		// GUI.Label (new Rect(5,5,100,100),"This is map.\nsay hi map.\nhi map!\n  bye map!");
+		for (var i = 0; i < deathMessages.Count; i++) {
+			var _message : MessageJS = deathMessages[i];
+			GUI.Label (new Rect(Screen.width / 2 - 100,Screen.height - 80 - (i * 20),200,20),_message.message as String,deathMessageStyle);
+			_message.age();
+			if (_message.alive > _message.lifetime) {
+				print(_message.alive);
+				deathMessages.RemoveAt(i);
+			}
+		}
+		for (i = 0; i < systemMessages.Count; i++) {
+			_message = systemMessages[i];
+			GUI.Label (new Rect(Screen.width - 10,Screen.height - 10 - (i * 10),200,10),_message.message as String,systemMessageStyle);
+			_message.age();
+			if (_message.alive > _message.lifetime) {
+				print(_message.alive);
+				systemMessages.RemoveAt(i);
+			}
+		}
 	}
 	switch(MenuPosition){
 		case MenuPositionEnumLive.MAIN :
@@ -111,4 +135,10 @@ function ReceiveBombs (_bombs : int) {
 }
 function ReceiveLives (_lives : int) {
 	lives = _lives;
+}
+function ReceiveDeathMessage (_message : String) {
+	deathMessages.Add(MessageJS(_message));
+}
+function ReceiveSystemMessage (_message : String) {
+	systemMessages.Add(MessageJS(_message));
 }
