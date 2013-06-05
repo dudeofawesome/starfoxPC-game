@@ -1,7 +1,6 @@
 #pragma strict
 import Holoville.HOTween;
 
-public var playerIndex : String = "00";
 public var controlMe : boolean = true;
 public var forwardSpeed = 0.0;
 public var rollSpeed = 0.0;
@@ -30,38 +29,42 @@ function Start () {
 			//we wait...
 		}
 		var _userInfo : String[] = webData.text.Split(","[0]);
-		if (webData.text != "" && webData.text != "failure") {
+		if (webData.text != "" && webData.text != "fail") {
 			username = _userInfo[0];
 			hue = int.Parse(_userInfo[1]);
 			linkToPic = _userInfo[2];
 		}
 	}
-	GameObject.Find("Arwing" + playerIndex + "/model/polygon1").renderer.material.color = new ColorHSVjs(hue,1f,1f).ToColor();
+	transform.gameObject.name = "Arwing" + playerID;
+	GameObject.Find("Arwing" + playerID + "/WeaponsBanks/WeapLaserLeft").SendMessage("ReceivePlayerID",playerID);
+	GameObject.Find("Arwing" + playerID + "/WeaponsBanks/WeapLaserRight").SendMessage("ReceivePlayerID",playerID);
+	GameObject.Find("Arwing" + playerID + "/WeaponsBanks/WeapSmartBomb").SendMessage("ReceivePlayerID",playerID);
+	GameObject.Find("Arwing" + playerID + "/model/polygon1").renderer.material.color = new ColorHSVjs(hue,1f,1f).ToColor();
 }
 
 function Update () {
-	if(controlMe && GameObject.Find("Arwing" + playerIndex + "/Cameras/CamDeath").camera.enabled == true)
+	if(controlMe && GameObject.Find("Arwing" + playerID + "/Cameras/CamDeath").camera.enabled == true)
 		controlMe = false;
 
 	//mouse down
 	if(controlMe && Input.GetMouseButtonDown(0)){
-		GameObject.Find("Arwing" + playerIndex + "/Lighting/LightGunLeft").light.enabled = true;
-		GameObject.Find("Arwing" + playerIndex + "/Lighting/LightGunRight").light.enabled = true;
+		GameObject.Find("Arwing" + playerID + "/Lighting/LightGunLeft").light.enabled = true;
+		GameObject.Find("Arwing" + playerID + "/Lighting/LightGunRight").light.enabled = true;
 	}
 
 	//mouse down
 	if(controlMe && Input.GetMouseButtonUp(0)){
-		GameObject.Find("Arwing" + playerIndex + "/Lighting/LightGunLeft").light.enabled = false;
-		GameObject.Find("Arwing" + playerIndex + "/Lighting/LightGunRight").light.enabled = false;
+		GameObject.Find("Arwing" + playerID + "/Lighting/LightGunLeft").light.enabled = false;
+		GameObject.Find("Arwing" + playerID + "/Lighting/LightGunRight").light.enabled = false;
 	}
 
 	if(controlMe && Input.GetMouseButtonDown(2)){
-		HOTween.To(GameObject.Find("Arwing" + playerIndex + "/Cameras/CamThirdPerson").camera, 0.3, "fieldOfView", 30);
-		HOTween.To(GameObject.Find("Arwing" + playerIndex + "/Cameras/CamFirstPerson").camera, 0.3, "fieldOfView", 30);
+		HOTween.To(GameObject.Find("Arwing" + playerID + "/Cameras/CamThirdPerson").camera, 0.3, "fieldOfView", 30);
+		HOTween.To(GameObject.Find("Arwing" + playerID + "/Cameras/CamFirstPerson").camera, 0.3, "fieldOfView", 30);
 	}
 	if(controlMe && Input.GetMouseButtonUp(2)){
-		HOTween.To(GameObject.Find("Arwing" + playerIndex + "/Cameras/CamThirdPerson").camera, 0.3, "fieldOfView", 60);
-		HOTween.To(GameObject.Find("Arwing" + playerIndex + "/Cameras/CamFirstPerson").camera, 0.3, "fieldOfView", 60);
+		HOTween.To(GameObject.Find("Arwing" + playerID + "/Cameras/CamThirdPerson").camera, 0.3, "fieldOfView", 60);
+		HOTween.To(GameObject.Find("Arwing" + playerID + "/Cameras/CamFirstPerson").camera, 0.3, "fieldOfView", 60);
 	}
 
 	//key down
@@ -78,50 +81,50 @@ function Update () {
 		// HOTween.To(transform, 0.7, "rotation", new Vector3(transform.rotation.eulerAngles.x,transform.rotation.eulerAngles.y,transform.rotation.eulerAngles.z + 179));
 	}
 	if(controlMe && Input.GetKeyDown(KeyCode.D)){
-		HOTween.To(GameObject.Find("Arwing" + playerIndex + "/Cameras/CamThirdPerson").transform, 0.3, "localRotation", new Vector3(0,0,-3));
+		HOTween.To(GameObject.Find("Arwing" + playerID + "/Cameras/CamThirdPerson").transform, 0.3, "localRotation", new Vector3(0,0,-3));
 		// arwing.camThirdPerson.transform.Rotate(0,0,-3);
 	}
 	if(controlMe && Input.GetKeyDown(KeyCode.A)){
-		HOTween.To(GameObject.Find("Arwing" + playerIndex + "/Cameras/CamThirdPerson").transform, 0.3, "localRotation", new Vector3(0,0,3));
+		HOTween.To(GameObject.Find("Arwing" + playerID + "/Cameras/CamThirdPerson").transform, 0.3, "localRotation", new Vector3(0,0,3));
 		// arwing.camThirdPerson.transform.Rotate(0,0,3);
 	}
 	if(controlMe && Input.GetKeyDown(KeyCode.W)){
-		HOTween.To(GameObject.Find("Arwing" + playerIndex + "/Cameras/CamThirdPerson").transform, 0.3, "localRotation", new Vector3(3,0,0));
+		HOTween.To(GameObject.Find("Arwing" + playerID + "/Cameras/CamThirdPerson").transform, 0.3, "localRotation", new Vector3(3,0,0));
 		// arwing.camThirdPerson.transform.Rotate(3,0,0);
 	}
 	if(controlMe && Input.GetKeyDown(KeyCode.S)){
-		HOTween.To(GameObject.Find("Arwing" + playerIndex + "/Cameras/CamThirdPerson").transform, 0.3, "localRotation", new Vector3(-3,0,0));
+		HOTween.To(GameObject.Find("Arwing" + playerID + "/Cameras/CamThirdPerson").transform, 0.3, "localRotation", new Vector3(-3,0,0));
 		// arwing.camThirdPerson.transform.Rotate(-3,0,0);
 	}
 	if(controlMe && Input.GetKeyDown(KeyCode.F1)){
-		GameObject.Find("Arwing" + playerIndex + "/Cameras/CamThirdPerson").camera.enabled = GameObject.Find("Arwing" + playerIndex + "/Cameras/CamFirstPerson").camera.enabled;
-		GameObject.Find("Arwing" + playerIndex + "/Cameras/CamFirstPerson").camera.enabled = !GameObject.Find("Arwing" + playerIndex + "/Cameras/CamThirdPerson").camera.enabled;
-		GameObject.Find("Arwing" + playerIndex + "/Cameras/CamThirdPerson").GetComponent(AudioListener).enabled = GameObject.Find("Arwing" + playerIndex + "/Cameras/CamFirstPerson").GetComponent(AudioListener).enabled;
-		GameObject.Find("Arwing" + playerIndex + "/Cameras/CamFirstPerson").GetComponent(AudioListener).enabled = !GameObject.Find("Arwing" + playerIndex + "/Cameras/CamThirdPerson").GetComponent(AudioListener).enabled;
-		if(GameObject.Find("Arwing" + playerIndex + "/3dGUI/crosshair").transform.localPosition.y == 2.3)
-			GameObject.Find("Arwing" + playerIndex + "/3dGUI/crosshair").transform.localPosition.y = 1.4;
+		GameObject.Find("Arwing" + playerID + "/Cameras/CamThirdPerson").camera.enabled = GameObject.Find("Arwing" + playerID + "/Cameras/CamFirstPerson").camera.enabled;
+		GameObject.Find("Arwing" + playerID + "/Cameras/CamFirstPerson").camera.enabled = !GameObject.Find("Arwing" + playerID + "/Cameras/CamThirdPerson").camera.enabled;
+		GameObject.Find("Arwing" + playerID + "/Cameras/CamThirdPerson").GetComponent(AudioListener).enabled = GameObject.Find("Arwing" + playerID + "/Cameras/CamFirstPerson").GetComponent(AudioListener).enabled;
+		GameObject.Find("Arwing" + playerID + "/Cameras/CamFirstPerson").GetComponent(AudioListener).enabled = !GameObject.Find("Arwing" + playerID + "/Cameras/CamThirdPerson").GetComponent(AudioListener).enabled;
+		if(GameObject.Find("Arwing" + playerID + "/3dGUI/crosshair").transform.localPosition.y == 2.3)
+			GameObject.Find("Arwing" + playerID + "/3dGUI/crosshair").transform.localPosition.y = 1.4;
 		else
-			GameObject.Find("Arwing" + playerIndex + "/3dGUI/crosshair").transform.localPosition.y = 2.3;
+			GameObject.Find("Arwing" + playerID + "/3dGUI/crosshair").transform.localPosition.y = 2.3;
 	}
 
 	//key up
 	if(controlMe && Input.GetKeyUp(KeyCode.D)){
 		// arwing.camThirdPerson.transform.Rotate(0,0,3);
-		HOTween.To(GameObject.Find("Arwing" + playerIndex + "/Cameras/CamThirdPerson").transform, 0.3, "localRotation", new Vector3(0,0,0));
+		HOTween.To(GameObject.Find("Arwing" + playerID + "/Cameras/CamThirdPerson").transform, 0.3, "localRotation", new Vector3(0,0,0));
 		rollSpeed = 0;
 	}
 	if(controlMe && Input.GetKeyUp(KeyCode.A)){
 		// arwing.camThirdPerson.transform.Rotate(0,0,-3);
-		HOTween.To(GameObject.Find("Arwing" + playerIndex + "/Cameras/CamThirdPerson").transform, 0.3, "localRotation", new Vector3(0,0,0));
+		HOTween.To(GameObject.Find("Arwing" + playerID + "/Cameras/CamThirdPerson").transform, 0.3, "localRotation", new Vector3(0,0,0));
 		rollSpeed = 0;
 	}
 	if(controlMe && Input.GetKeyUp(KeyCode.W)){
-		HOTween.To(GameObject.Find("Arwing" + playerIndex + "/Cameras/CamThirdPerson").transform, 0.3, "localRotation", new Vector3(0,0,0));
+		HOTween.To(GameObject.Find("Arwing" + playerID + "/Cameras/CamThirdPerson").transform, 0.3, "localRotation", new Vector3(0,0,0));
 		// arwing.camThirdPerson.transform.Rotate(-3,0,0);
 		pitchSpeed = 0;
 	}
 	if(controlMe && Input.GetKeyUp(KeyCode.S)){
-		HOTween.To(GameObject.Find("Arwing" + playerIndex + "/Cameras/CamThirdPerson").transform, 0.3, "localRotation", new Vector3(0,0,0));
+		HOTween.To(GameObject.Find("Arwing" + playerID + "/Cameras/CamThirdPerson").transform, 0.3, "localRotation", new Vector3(0,0,0));
 		// arwing.camThirdPerson.transform.Rotate(3,0,0);
 		pitchSpeed = 0;
 	}
@@ -157,7 +160,7 @@ function FixedUpdate () {
 			// arwing.tailLights.GetComponent(MeshRenderer).enabled = true;
 		// 	arwing.engineLight.GetComponent(TrailRenderer).enabled = true;
 		// }
-		HOTween.To(GameObject.Find("Arwing" + playerIndex + "/Cameras/CamThirdPerson").camera, 0.3, "fieldOfView", 45 + (forwardSpeed / 4));
+		HOTween.To(GameObject.Find("Arwing" + playerID + "/Cameras/CamThirdPerson").camera, 0.3, "fieldOfView", 45 + (forwardSpeed / 4));
 	}
 	if (controlMe && Input.GetKey(KeyCode.LeftShift) && forwardSpeed > 0) {
 		forwardSpeed -= .45;
@@ -165,11 +168,11 @@ function FixedUpdate () {
 			// arwing.tailLights.GetComponent(MeshRenderer).enabled = false;
 		// 	arwing.engineLight.GetComponent(TrailRenderer).enabled = false;
 		// }
-		HOTween.To(GameObject.Find("Arwing" + playerIndex + "/Cameras/CamThirdPerson").camera, 0.3, "fieldOfView", 45 + (forwardSpeed / 4));
+		HOTween.To(GameObject.Find("Arwing" + playerID + "/Cameras/CamThirdPerson").camera, 0.3, "fieldOfView", 45 + (forwardSpeed / 4));
 	}
 	transform.position += (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward;
-	GameObject.Find("Arwing" + playerIndex + "/Lighting/LightEngine").light.intensity = forwardSpeed / 120 * 7.7 + 0.3;
-	GameObject.Find("Arwing" + playerIndex + "/Emitters/EmitPartEngine").particleSystem.emissionRate = forwardSpeed * 2;
+	GameObject.Find("Arwing" + playerID + "/Lighting/LightEngine").light.intensity = forwardSpeed / 120 * 7.7 + 0.3;
+	GameObject.Find("Arwing" + playerID + "/Emitters/EmitPartEngine").particleSystem.emissionRate = forwardSpeed * 2;
 	// GameObject.Find("Emitters/EmitPartEngine").particleSystem.emissionRate = forwardSpeed * 2;
 
 	//minimap
@@ -183,41 +186,41 @@ function FixedUpdate () {
 function OnCollisionEnter (other : Collision) {
 	if (other.gameObject.tag == "immobile") {
 		HOTween.To(transform, 0.3, "position", new Vector3(transform.position.x - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.x * 40,transform.position.y - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.y * 40,transform.position.z - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.z * 40));
-		AddDamage(15 * forwardSpeed / 120);
+		AddDamage(15 * forwardSpeed / 120, playerID);
 	}
 	else if (other.gameObject.tag == "mobile") {
 		HOTween.To(transform, 0.3, "position", new Vector3(transform.position.x - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.x * 5,transform.position.y - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.y * 5,transform.position.z - (12 / (5 + Mathf.Pow(0.94, (forwardSpeed - 100)))) * transform.forward.z * 5));
 		// other.transform.AddForce(transform.forward);
-		AddDamage(5 * forwardSpeed / 120);
+		AddDamage(5 * forwardSpeed / 120, playerID);
 	}
 	else if (other.gameObject.tag == "mobile_push") {
-		AddDamage(3 * forwardSpeed / 120);
+		AddDamage(3 * forwardSpeed / 120, playerID);
 	}
 	else if (other.gameObject.tag == "pickup") {
 		if (other.gameObject.name == "smart_bomb_pickup") {
 			if (controlMe) {
-				GameObject.Find("Arwing" + playerIndex + "/WeaponsBanks/WeapSmartBomb").SendMessage("ReceiveBombs",1);
+				GameObject.Find("Arwing" + playerID + "/WeaponsBanks/WeapSmartBomb").SendMessage("ReceiveBombs",1);
 			}
 			Destroy(other.gameObject);
 		}
 		if (other.gameObject.name == "laser_upgrade_pickup") {
 			if (controlMe) {
-				GameObject.Find("Arwing" + playerIndex + "/WeaponsBanks/WeapLaserLeft").SendMessage("ReceiveDamageMultiplier",1);
-				GameObject.Find("Arwing" + playerIndex + "/WeaponsBanks/WeapLaserRight").SendMessage("ReceiveDamageMultiplier",1);
+				GameObject.Find("Arwing" + playerID + "/WeaponsBanks/WeapLaserLeft").SendMessage("ReceiveDamageMultiplier",1);
+				GameObject.Find("Arwing" + playerID + "/WeaponsBanks/WeapLaserRight").SendMessage("ReceiveDamageMultiplier",1);
 			}
 			Destroy(other.gameObject);
 		}
 	}
 }
 
-function AddDamage (_damage : int) {
+function AddDamage (_damage : int, _shooterID : int) {
 	health -= _damage;
 
 	//smoke when near death
 	if(this.health < 20)
-		GameObject.Find("Arwing" + playerIndex + "/Emitters/EmitPartSmoke").particleSystem.emissionRate = 10;
+		GameObject.Find("Arwing" + playerID + "/Emitters/EmitPartSmoke").particleSystem.emissionRate = 10;
 	else if(this.health > 20)
-		GameObject.Find("Arwing" + playerIndex + "/Emitters/EmitPartSmoke").particleSystem.emissionRate = 0;
+		GameObject.Find("Arwing" + playerID + "/Emitters/EmitPartSmoke").particleSystem.emissionRate = 0;
 
 	if (controlMe)
 		GameObject.Find("GUI").SendMessage("ReceiveHealth",this.health);
@@ -227,8 +230,14 @@ function AddDamage (_damage : int) {
 
 		if (controlMe)
 			GameObject.Find("GUI").SendMessage("ReceiveDeathMessage","You have died.");
-		else
-			GameObject.Find("GUI").SendMessage("ReceiveDeathMessage","You killed " + this.username);
+		else {
+			if (GameObject.Find("Arwing" + _shooterID).GetComponent(ShipController).controlMe) {
+				GameObject.Find("GUI").SendMessage("ReceiveDeathMessage","You killed " + this.username);
+			}
+			else {
+				GameObject.Find("GUI").SendMessage("ReceiveSystemMessage",this.username + " died");
+			}
+		}
 
 		var _parts1 : GameObject = Instantiate(particleFlash);
 		var _parts2 : GameObject = Instantiate(particleFireball);
@@ -243,11 +252,11 @@ function AddDamage (_damage : int) {
 
 		this.health = 500;
 
-		for (var _colliderPart : Transform in GameObject.Find("Arwing" + playerIndex + "/Colliders").transform) {
+		for (var _colliderPart : Transform in GameObject.Find("Arwing" + playerID + "/Colliders").transform) {
 			_colliderPart.collider.enabled = false;
 		}
 
-		for (var _rendererPart : Transform in GameObject.Find("Arwing" + playerIndex + "/model").transform) {
+		for (var _rendererPart : Transform in GameObject.Find("Arwing" + playerID + "/model").transform) {
 			_rendererPart.renderer.enabled = false;
 		}
 
@@ -256,12 +265,12 @@ function AddDamage (_damage : int) {
 		if (controlMe) {
 			GameObject.Find("GUI").SendMessage("ReceiveLives",this.lives);
 
-			GameObject.Find("Arwing" + playerIndex + "/Cameras/CamDeath").camera.enabled = true;
-			GameObject.Find("Arwing" + playerIndex + "/Cameras/CamDeath").GetComponent(AudioListener).enabled = true;
-			GameObject.Find("Arwing" + playerIndex + "/Cameras/CamThirdPerson").camera.enabled = false;
-			GameObject.Find("Arwing" + playerIndex + "/Cameras/CamFirstPerson").camera.enabled = false;
-			GameObject.Find("Arwing" + playerIndex + "/Cameras/CamThirdPerson").GetComponent(AudioListener).enabled = false;
-			GameObject.Find("Arwing" + playerIndex + "/Cameras/CamFirstPerson").GetComponent(AudioListener).enabled = false;
+			GameObject.Find("Arwing" + playerID + "/Cameras/CamDeath").camera.enabled = true;
+			GameObject.Find("Arwing" + playerID + "/Cameras/CamDeath").GetComponent(AudioListener).enabled = true;
+			GameObject.Find("Arwing" + playerID + "/Cameras/CamThirdPerson").camera.enabled = false;
+			GameObject.Find("Arwing" + playerID + "/Cameras/CamFirstPerson").camera.enabled = false;
+			GameObject.Find("Arwing" + playerID + "/Cameras/CamThirdPerson").GetComponent(AudioListener).enabled = false;
+			GameObject.Find("Arwing" + playerID + "/Cameras/CamFirstPerson").GetComponent(AudioListener).enabled = false;
 		}
 
 		yield WaitForSeconds(5);
@@ -272,24 +281,24 @@ function AddDamage (_damage : int) {
 
 		this.health = 100;
 		this.forwardSpeed = 50;
-		GameObject.Find("Arwing" + playerIndex + "/Emitters/EmitPartSmoke").particleSystem.emissionRate = 0;
+		GameObject.Find("Arwing" + playerID + "/Emitters/EmitPartSmoke").particleSystem.emissionRate = 0;
 
-		for (var _colliderPart : Transform in GameObject.Find("Arwing" + playerIndex + "/Colliders").transform) {
+		for (var _colliderPart : Transform in GameObject.Find("Arwing" + playerID + "/Colliders").transform) {
 			_colliderPart.collider.enabled = true;
 		}
 
-		for (var _rendererPart : Transform in GameObject.Find("Arwing" + playerIndex + "/model").transform) {
+		for (var _rendererPart : Transform in GameObject.Find("Arwing" + playerID + "/model").transform) {
 			if (_rendererPart.name != "polygon4" && _rendererPart.name != "polygon5" && _rendererPart.name != "polygon6" && _rendererPart.name != "polygon7" && _rendererPart.name != "polygon8") _rendererPart.renderer.enabled = true;
 		}
 
 		if (_controlMe) {
 			GameObject.Find("GUI").SendMessage("ReceiveHealth",this.health);
 
-			GameObject.Find("Arwing" + playerIndex + "/Cameras/CamThirdPerson").camera.fieldOfView = 57.5;
-			GameObject.Find("Arwing" + playerIndex + "/Cameras/CamThirdPerson").camera.enabled = true;
-			GameObject.Find("Arwing" + playerIndex + "/Cameras/CamThirdPerson").GetComponent(AudioListener).enabled = true;
-			GameObject.Find("Arwing" + playerIndex + "/Cameras/CamDeath").camera.enabled = false;
-			GameObject.Find("Arwing" + playerIndex + "/Cameras/CamDeath").GetComponent(AudioListener).enabled = false;
+			GameObject.Find("Arwing" + playerID + "/Cameras/CamThirdPerson").camera.fieldOfView = 57.5;
+			GameObject.Find("Arwing" + playerID + "/Cameras/CamThirdPerson").camera.enabled = true;
+			GameObject.Find("Arwing" + playerID + "/Cameras/CamThirdPerson").GetComponent(AudioListener).enabled = true;
+			GameObject.Find("Arwing" + playerID + "/Cameras/CamDeath").camera.enabled = false;
+			GameObject.Find("Arwing" + playerID + "/Cameras/CamDeath").GetComponent(AudioListener).enabled = false;
 
 			controlMe = _controlMe;
 		}
@@ -302,4 +311,9 @@ function ReceiveLife (_lives : int) {
 
 function SetLives (_lives : int) {
 	lives = _lives;
+}
+
+function SetplayerID (_index : int) {
+	playerID = _index;
+	transform.gameObject.name = "Arwing" + _index;
 }

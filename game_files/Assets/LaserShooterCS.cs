@@ -14,6 +14,8 @@ public class LaserShooterCS : MonoBehaviour {
 	public enum WeaponType {LASER,SMARTBOMB};
 	public WeaponType weaponType = WeaponType.LASER;
 
+	public int playerID = -1;
+
 	public int damageMultiplier = 1;
 
 	private int bombsRemaining = 1;
@@ -30,11 +32,11 @@ public class LaserShooterCS : MonoBehaviour {
 			controlMe = false;
 		else
 			controlMe = true;
-		if (weaponType == WeaponType.LASER) {
+		if (controlMe && weaponType == WeaponType.LASER) {
 			if (Input.GetMouseButtonDown(0)) {
 				chargeTime = Time.time;
 			}
-			if (controlMe && Input.GetMouseButtonUp(0)) {
+			if (Input.GetMouseButtonUp(0)) {
 				chargeTime = Time.time - chargeTime;
 				GameObject.Find("WeapLaserLeft").GetComponent<AudioSource>().Play();
 				GameObject.Find("WeapLaserRight").GetComponent<AudioSource>().Play();
@@ -49,10 +51,11 @@ public class LaserShooterCS : MonoBehaviour {
 				go.transform.Rotate (0,90,0);
 				go.rigidbody.AddForce (transform.forward * fMag + transform.forward);
 				go.SendMessage ("ReceiveDamageMultiplier",damageMultiplier);
+				go.SendMessage ("ReceiveShooterID",playerID);
 			}
 		}
-		else if (weaponType == WeaponType.SMARTBOMB) {
-			if (controlMe && Input.GetMouseButtonDown(1) && bombsRemaining > 0) {
+		else if (controlMe && weaponType == WeaponType.SMARTBOMB) {
+			if (Input.GetMouseButtonDown(1) && bombsRemaining > 0) {
 				bombsRemaining--;
 				GameObject.Find("WeapSmartBomb").GetComponent<AudioSource>().Play();
 				GameObject go = argoProjectiles[iNext++];
@@ -66,16 +69,22 @@ public class LaserShooterCS : MonoBehaviour {
 				go.transform.Rotate(0,180,0);
 				go.rigidbody.AddForce (transform.forward * fMag + transform.forward);
 				GameObject.Find("GUI").SendMessage("ReceiveBombs",this.bombsRemaining);
+				go.SendMessage ("ReceiveShooterID",playerID);
 			}
 		}
 	}
 
 	public void ReceiveBombs(int _count) {
 		bombsRemaining += _count;
-		GameObject.Find("GUI").SendMessage("ReceiveBombs",this.bombsRemaining);
+		if(controlMe)
+			GameObject.Find("GUI").SendMessage("ReceiveBombs",this.bombsRemaining);
 	}
 
 	public void ReceiveDamageMultiplier (int _newMultiplier) {
 		damageMultiplier += _newMultiplier;
+	}
+
+	public void ReceivePlayerID (int _index) {
+		playerID = _index;
 	}
 }

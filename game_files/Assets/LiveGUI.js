@@ -11,14 +11,17 @@ public var healthBarBase : GUIStyle;
 public var healthBarHead : GUIStyle;
 public var systemMessageStyle : GUIStyle;
 public var deathMessageStyle : GUIStyle;
+public var descLabelStyle : GUIStyle;
 public var statsTex : Texture;
+
+public var guiSkin : GUISkin;
 
 private var health = 100.0;
 private var lives = 3;
 private var bombs = 1;
 
-private var deathMessages : List.<MessageJS> = new List.<MessageJS>();
-private var systemMessages : List.<MessageJS> = new List.<MessageJS>();
+public var deathMessages : List.<MessageJS> = new List.<MessageJS>();
+public var systemMessages : List.<MessageJS> = new List.<MessageJS>();
 
 private enum MenuPositionEnumLive {NONE,MAIN,SETTINGS,SCORE,LEVELQUITTER};
 
@@ -38,53 +41,35 @@ function Update () {
 }
 
 function OnGUI () {
-	if(MenuPosition == MenuPositionEnumLive.NONE){
-		for (var i = 0; i < deathMessages.Count; i++) {
-			var _message : MessageJS = deathMessages[i];
-			GUI.Label (new Rect(Screen.width / 2 - 100,Screen.height - 80 - (i * 20),200,20),_message.message as String,deathMessageStyle);
-			_message.age();
-			if (_message.alive > _message.lifetime) {
-				print(_message.alive);
-				deathMessages.RemoveAt(i);
-			}
-		}
-		for (i = 0; i < systemMessages.Count; i++) {
-			_message = systemMessages[i];
-			GUI.Label (new Rect(Screen.width - 10,Screen.height - 10 - (i * 10),200,10),_message.message as String,systemMessageStyle);
-			_message.age();
-			if (_message.alive > _message.lifetime) {
-				print(_message.alive);
-				systemMessages.RemoveAt(i);
-			}
-		}
-	}
+	GUI.skin = guiSkin;
 	switch(MenuPosition){
 		case MenuPositionEnumLive.MAIN :
 			GUI.Label (new Rect(Screen.width / 2 - 50, 70, 100, 30), "Starfox PC", labelStyle);
-			if (GUI.Button (new Rect(Screen.width / 2 - 250, 250, 500, 50), "Settings", buttonStyle)) {
+			if (GUI.Button (new Rect(Screen.width / 2 - 250, 250, 500, 50), "Settings")) {
 				MenuPosition = MenuPositionEnumLive.SETTINGS;
 			}
-			if (GUI.Button (new Rect(Screen.width / 2 - 250, 310, 245, 50), "Kill Me", buttonStyle)) {
+			if (GUI.Button (new Rect(Screen.width / 2 - 250, 310, 245, 50), "Kill Me")) {
 				MenuPosition = MenuPositionEnumLive.NONE;
 				GameObject.Find("Arwing00").SendMessage("AddDamage",101);
 			}
-			if (GUI.Button (new Rect(Screen.width / 2, 310, 245, 50), "Quit", buttonStyle)) {
+			if (GUI.Button (new Rect(Screen.width / 2, 310, 245, 50), "Quit")) {
 				MenuPosition = MenuPositionEnumLive.LEVELQUITTER;
 				Application.LoadLevel(mainMenu);
 			}
-			if (GUI.Button (new Rect(Screen.width / 2 - 250, Screen.height - 70, 500, 50), "Continue", buttonStyle)) {
+			if (GUI.Button (new Rect(Screen.width / 2 - 250, Screen.height - 70, 500, 50), "Continue")) {
 				MenuPosition = MenuPositionEnumLive.NONE;
 			}
 		break;
 		case MenuPositionEnumLive.SETTINGS :
 			GUI.Label (new Rect(Screen.width / 2 - 50, 70, 100, 30), "Settings", labelStyle);
-			if (GUI.Button (new Rect(Screen.width / 2 - 250, 250, 500, 50), "Ipsum", buttonStyle)) {
-				// MenuPosition = MenuPositionEnumLive.ACCOUNT;
+			if (GUI.Button (new Rect(Screen.width / 2 - 200, 250, 50, 50), "<")) {
+				QualitySettings.DecreaseLevel(true);
 			}
-			if (GUI.Button (new Rect(Screen.width / 2 - 250, 310, 500, 50), "Bacon", buttonStyle)) {
-				// MenuPosition = MenuPositionEnumLive.ACCOUNT;
+			GUI.Label (new Rect(Screen.width / 2 - 70, 250, 380, 50), "Quality: " + QualitySettings.GetQualityLevel(), descLabelStyle);
+			if (GUI.Button (new Rect(Screen.width / 2 + 150, 250, 50, 50), ">")) {
+				QualitySettings.IncreaseLevel(true);
 			}
-			if (GUI.Button (new Rect(Screen.width / 2 - 250, Screen.height - 70, 500, 50), "Back", buttonStyle)) {
+			if (GUI.Button (new Rect(Screen.width / 2 - 250, Screen.height - 70, 500, 50), "Back")) {
 				MenuPosition = MenuPositionEnumLive.MAIN;
 			}
 		break;
@@ -93,6 +78,24 @@ function OnGUI () {
 		break;
 		case MenuPositionEnumLive.LEVELQUITTER :
 			GUI.Label (new Rect(Screen.width / 2 - 50, 70, 100, 30), "Quitting...", labelStyle);
+		break;
+		case MenuPositionEnumLive.NONE :
+			for (var i = 0; i < deathMessages.Count; i++) {
+				var _message : MessageJS = deathMessages[i];
+				GUI.Label (new Rect(Screen.width / 2 - 100,Screen.height - 80 - (i * 20),200,20),_message.message as String,deathMessageStyle);
+				_message.age();
+				if (_message.alive > _message.lifetime) {
+					deathMessages.RemoveAt(i);
+				}
+			}
+			for (i = 0; i < systemMessages.Count; i++) {
+				_message = systemMessages[i];
+				GUI.Label (new Rect(Screen.width - 250,Screen.height - ((i + 1) * 15),200,10),_message.message as String,systemMessageStyle);
+				_message.age();
+				if (_message.alive > _message.lifetime) {
+					systemMessages.RemoveAt(i);
+				}
+			}
 		break;
 	}
 

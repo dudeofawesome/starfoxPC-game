@@ -31,9 +31,9 @@ public class MainMenuGUI : MonoBehaviour {
 	}
 
 	void OnGUI () {
+		GUI.skin = guiSkin;
 		switch(MenuPosition){
 			case MenuPositionEnum.MAIN :
-				GUI.skin = guiSkin;
 				GUI.Label (new Rect(Screen.width / 2 - 50, 70, 100, 30), "Starfox PC", titleLabelStyle);
 				if (GUI.Button (new Rect(Screen.width / 2 - 250, 250, 500, 50), "Start")) {
 					MenuPosition = MenuPositionEnum.LEVELCHOOSER;
@@ -50,15 +50,14 @@ public class MainMenuGUI : MonoBehaviour {
 				}
 			break;
 			case MenuPositionEnum.ACCOUNT :
-				GUI.skin = guiSkin;
 				GUI.Label (new Rect(Screen.width / 2 - 50, 70, 100, 30), "Account Options", titleLabelStyle);
-				GUI.BeginGroup(new Rect(0,80,Screen.width,Screen.height));
-					GUI.Label (new Rect(Screen.width / 2 - 250, 250, 500, 30), "Email", descLabelStyle);
-					PlayerPrefs.SetString("email",GUI.TextField (new Rect(Screen.width / 2 - 150, 250, 400, 20), PlayerPrefs.GetString("email")));
-					GUI.Label (new Rect(Screen.width / 2 - 250, 310, 500, 50), "Color", descLabelStyle);
-					PlayerPrefs.SetInt("color",(int) GUI.HorizontalSlider (new Rect(Screen.width / 2 - 150, 330, 400, 20), PlayerPrefs.GetInt("color"), 0.0f, 255.0f));
+				GUI.BeginGroup(new Rect(0,250,Screen.width,Screen.height));
+					GUI.Label (new Rect(Screen.width / 2 - 250, 0, 500, 30), "Email", descLabelStyle);
+					PlayerPrefs.SetString("email",GUI.TextField (new Rect(Screen.width / 2 - 150, 0, 400, 20), PlayerPrefs.GetString("email")));
+					GUI.Label (new Rect(Screen.width / 2 - 250, 60, 500, 50), "Color", descLabelStyle);
+					PlayerPrefs.SetInt("color",(int) GUI.HorizontalSlider (new Rect(Screen.width / 2 - 150, 80, 400, 20), PlayerPrefs.GetInt("color"), 1.0f, 255.0f));
 					// PlayerPrefs.SetInt("color",(int) GUI.HorizontalSlider (new Rect(Screen.width / 2 - 310, 250, 500, 20), PlayerPrefs.GetInt("color"), 0.0f, 255.0f,sliderBackStyle,sliderThumbStyle));
-					if (GUI.Button (new Rect(Screen.width / 2 - 250, Screen.height - 120, 500, 50), "Apply Changes")) {
+					if (GUI.Button (new Rect(Screen.width / 2 - 250, Screen.height - 380, 500, 50), "Apply Changes")) {
 						WWW webData = new WWW("http://s.clrk.us/unity-hue.php?i=" + PlayerPrefs.GetInt("userID") + "&h=" + PlayerPrefs.GetInt("color"));
 						//wait for download to finish...
 						while(!webData.isDone){
@@ -72,18 +71,19 @@ public class MainMenuGUI : MonoBehaviour {
 						//	PlayerPrefs.SetInt("color",oldHue);
 						//}
 					}
-					if (GUI.Button (new Rect(Screen.width / 2 - 250, Screen.height - 70, 500, 50), "Back")) {
+					if (GUI.Button (new Rect(Screen.width / 2 - 250, Screen.height - 320, 500, 50), "Back")) {
 						MenuPosition = MenuPositionEnum.MAIN;
 					}
 				GUI.EndGroup();
 			break;
 			case MenuPositionEnum.SETTINGS :
 				GUI.Label (new Rect(Screen.width / 2 - 50, 70, 100, 30), "Settings", titleLabelStyle);
-				if (GUI.Button (new Rect(Screen.width / 2 - 250, 250, 500, 50), "Ipsum")) {
-
+				if (GUI.Button (new Rect(Screen.width / 2 - 200, 250, 50, 50), "<")) {
+					QualitySettings.DecreaseLevel(true);
 				}
-				if (GUI.Button (new Rect(Screen.width / 2 - 250, 310, 500, 50), "Bacon")) {
-					MenuPosition = MenuPositionEnum.ACCOUNT;
+				GUI.Label (new Rect(Screen.width / 2 - 70, 250, 380, 50), "Quality: " + QualitySettings.GetQualityLevel(), descLabelStyle);
+				if (GUI.Button (new Rect(Screen.width / 2 + 150, 250, 50, 50), ">")) {
+					QualitySettings.IncreaseLevel(true);
 				}
 				if (GUI.Button (new Rect(Screen.width / 2 - 250, Screen.height - 70, 500, 50), "Back")) {
 					MenuPosition = MenuPositionEnum.MAIN;

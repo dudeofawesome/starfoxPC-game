@@ -158,7 +158,7 @@ public class loginMenu : MonoBehaviour {
 				passwordConfirm = GUI.PasswordField (new Rect(Screen.width / 2 - 90, 420, 340, 20), passwordConfirm, "*"[0]);
 
 				GUI.Label (new Rect(Screen.width / 2 - 250, 480, 500, 50), "Color", descLabelStyle);
-				PlayerPrefs.SetInt("color",(int) GUI.HorizontalSlider (new Rect(Screen.width / 2 - 150, 490, 400, 20), PlayerPrefs.GetInt("color"), 0.0f, 255.0f));
+				PlayerPrefs.SetInt("color",(int) GUI.HorizontalSlider (new Rect(Screen.width / 2 - 150, 490, 400, 20), PlayerPrefs.GetInt("color"), 1.0f, 255.0f));
 				hue = PlayerPrefs.GetInt("color");
 
 				//fail captcha
@@ -184,7 +184,7 @@ public class loginMenu : MonoBehaviour {
 							while(!webLogin.isDone){
 								//we wait...
 							}
-							if (webLogin.text == "[X]\nYou have successfully registered. You can now login here.") {
+							if (webLogin.text == "You have successfully registered. You can now login <a href=\"login.php\">here</a>.") {
 									MenuPosition = MenuPositionEnum.LOGIN;
 							}
 							else {
